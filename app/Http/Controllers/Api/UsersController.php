@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Planning;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -36,6 +38,30 @@ class UsersController extends Controller
             'status_code' => 200
         ];
         
+        return response()->json($data, 200);
+    }
+
+    public function getSubscriptions(int $id)
+    {
+        $subscriptions = Subscription::getSubscriptionsByUser($id);
+
+        $data = [
+            'data' => $subscriptions,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getPlannings(int $id)
+    {
+        $plannings = Planning::getPlanningsByProfessional($id);
+
+        $data = [
+            'data' => $plannings,
+            'status_code' => 200
+        ];
+
         return response()->json($data, 200);
     }
 }

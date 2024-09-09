@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Speciality;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class SpecialityController extends Controller
 {
     public function all()
     {
-        $categories = Category::all();
+        $specialities = Speciality::all();
 
         $data = [
-            'data' => $categories,
+            'data' => $specialities,
             'status_code' => 200
         ];
 
@@ -22,13 +22,13 @@ class CategoriesController extends Controller
 
     public function getByID(int $id)
     {
-        $category = Category::findOrFail($id);
+        $speciality = Speciality::findOrFail($id);
 
         $data = [
-            'data' => $category,
+            'data' => $speciality,
             'status_code' => 200
         ];
 
-        return response()->json($data,200);
+        return response()->json($data, 200);
     }
 }

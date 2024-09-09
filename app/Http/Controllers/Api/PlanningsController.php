@@ -3,29 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Planning;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class PlanningsController extends Controller
 {
-    public function all()
+    public function getPlannings()
     {
-        $categories = Category::all();
+        $plannings = Planning::all();
 
         $data = [
-            'data' => $categories,
+            'data' => $plannings,
             'status_code' => 200
         ];
 
         return response()->json($data,200);
     }
 
-    public function getByID(int $id)
+    public function getPlanningByID(int $id)
     {
-        $category = Category::findOrFail($id);
+        $planning = Planning::findOrFail($id);
 
         $data = [
-            'data' => $category,
+            'data' => $planning,
             'status_code' => 200
         ];
 
