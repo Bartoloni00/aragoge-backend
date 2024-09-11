@@ -21,7 +21,7 @@ class Subscription extends Model
 
     public function payments()
     {
-        return $this->hasMany(Purchase::class, 'subscription_id');
+        return $this->hasMany(Payment::class, 'subscription_id');
     }
 
     public static function getSubscriptionsByUser(int $id)
@@ -29,8 +29,8 @@ class Subscription extends Model
         $subscriptionsByUser = Subscription::whereHas('user', function($query) use ($id) {
             $query->where('id', $id);
         })
+        ->with('payments')
         ->get();
-
         return $subscriptionsByUser;
     }
 }

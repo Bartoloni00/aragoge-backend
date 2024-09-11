@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\PlanningsController;
+use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\SpecialityController;
+use App\Http\Controllers\Api\SubscriptionsController;
 use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +47,18 @@ Route::controller(PlanningsController::class)
     ->group(function(){
         Route::get('/', 'getPlannings');
         Route::get('/{id}', 'getPlanningByID')->whereNumber('id');
+    });
+
+Route::controller(RolesController::class)
+    ->prefix('roles')
+    ->group(function(){
+        Route::get('/', 'getRoles');
+        Route::get('/{id}', 'getRolByID')->whereNumber('id');
+    });
+    
+Route::controller(SubscriptionsController::class)
+    ->prefix('subscriptions')
+    ->group(function(){
+        Route::get('/', 'getSubscriptions');
+        Route::get('/{id}', 'getSubscriptionByID')->whereNumber('id');
     });
