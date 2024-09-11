@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\PlanningsController;
 use App\Http\Controllers\Api\RolesController;
@@ -62,3 +63,10 @@ Route::controller(SubscriptionsController::class)
         Route::get('/', 'getSubscriptions');
         Route::get('/{id}', 'getSubscriptionByID')->whereNumber('id');
     });
+
+Route::controller(AuthController::class)->group(callback: function(): void{
+    Route::post(uri: '/register', action: 'register');
+    Route::post(uri: '/login', action: 'login');
+    Route::post(uri: '/logout', action: 'logout')
+        ->middleware(['auth:sanctum']);
+});

@@ -6,10 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     protected $appends = ['rol_name'];
 
@@ -23,6 +23,11 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'rol_id',
+        'image_id',
+        'professional_id',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -36,6 +41,34 @@ class User extends Authenticatable
         "email_verified_at",
         'rol',
         'profession'
+    ];
+    public const CREATE_RULES = [
+        'first_name' => ['required', 'max:60'],
+        'last_name' => ['required', 'max:60'],
+        'email' => ['required', 'email'],
+        'rol_id' => ['required', 'in:2,3'], // Acepta solo los valores 2 o 3
+        'password' => [
+            'required',
+            'string', 
+            'min:6', // Mínimo 6 caracteres
+            'regex:/[a-z]/', // Debe contener al menos una letra minúscula
+            'regex:/[A-Z]/', // Debe contener al menos una letra mayúscula
+            'regex:/[0-9]/', // Debe contener al menos un número
+        ]
+    ];
+    
+    public const ERROR_MESSAGES = [
+        'first_name.required' => 'First name is a required fill',
+        'first_name.max' => 'First name max length: 60',
+        'last_name.required' => 'Last name is a required fill',
+        'last_name.max' => 'Last name max length: 60',
+        'email.required' => 'Email is required',
+        'email.email' => 'This must be an email',
+        'rol_id.required' => 'Role ID is required',
+        'rol_id.in' => 'Role ID must be either 2 or 3', // Para los valores permitidos de rol
+        'password.required' => 'Password is required',
+        'password.min' => 'Password must have at least 6 characters',
+        'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
     ];
 
     /**
@@ -100,6 +133,7 @@ class User extends Authenticatable
     }
     private static function addProfessionalData(User $professional): array
     {
+       if ($professional->profession) {
         $user = [];
         $user['description'] = $professional->profession->description;
         $user['synopsis'] = $professional->profession->synopsis;
@@ -107,6 +141,9 @@ class User extends Authenticatable
         $user['specialty_name'] = $professional->profession->specialty_name;
 
         return $user;
+       } else {
+        return  ['This professional dont have a profile yet'];
+       }
     }
 
 }

@@ -57,8 +57,10 @@ class UsersController extends Controller
     {
         $plannings = Planning::getPlanningsByProfessional($id);
 
+        if ($plannings->count() < 1) $plannings = 'This professional dont have plannigs yet';
+        
         $data = [
-            'data' => $plannings,
+            'data' => $plannings ,
             'status_code' => 200
         ];
 
