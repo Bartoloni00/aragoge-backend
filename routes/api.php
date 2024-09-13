@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriesController;
+use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\PlanningsController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\SpecialityController;
@@ -48,6 +49,7 @@ Route::controller(PlanningsController::class)
     ->group(function(){
         Route::get('/', 'getPlannings');
         Route::get('/{id}', 'getPlanningByID')->whereNumber('id');
+        Route::get('/{id}/subscriptions', 'getSubscriptionsForThisPlanning')->whereNumber('id');
     });
 
 Route::controller(RolesController::class)
@@ -70,3 +72,10 @@ Route::controller(AuthController::class)->group(callback: function(): void{
     Route::post(uri: '/logout', action: 'logout')
         ->middleware(['auth:sanctum']);
 });
+
+Route::controller(PaymentsController::class)
+    ->prefix('payments')
+    ->group(function(){
+        Route::get('/', 'getPayments');
+        Route::get('/{id}', 'getPaymentByID')->whereNumber('id');
+    });

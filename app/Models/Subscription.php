@@ -30,7 +30,24 @@ class Subscription extends Model
             $query->where('id', $id);
         })
         ->with('payments')
-        ->get();
+        ->get()
+        ->each(function($subscription) {
+            // Ocultamos los campos 'id' y 'subscription_id' de cada pago
+            $subscription->payments->each(function($payment) {
+                $payment->makeHidden(['id', 'subscription_id']);
+            });
+        });
         return $subscriptionsByUser;
+    }
+
+    public static function getSubscriptionsByPlanningID(int $planning_id)
+    {
+        $subscriptionsByPlanning = Subscription::whereHas('planning', function($query) use ($planning_id) {
+            $query->where('id', $planning_id);
+        })->get();
+
+        if ($subscriptionsByPlanning->count() < 1) return "This planning doesn't have subscriptions yet.";
+
+        return $subscriptionsByPlanning;
     }
 }
