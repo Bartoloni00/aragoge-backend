@@ -9,9 +9,16 @@ use Illuminate\Http\Request;
 
 class PlanningsController extends Controller
 {
-    public function getPlannings()
+    public function getPlannings(Request $request)
     {
-        $plannings = Planning::all();
+        $queryParams = $request->only(['category','min_price','max_price']);
+
+        if(!empty($queryParams['category'])){
+            $plannings = Planning::getPlanningsByCategoryFiltered($queryParams['category']);
+            if($plannings->count() < 1) return response()->json(['Error' => 'Plannings Not Found','status_code' => 404], 404);
+        } else {
+            $plannings = Planning::all();
+        }
 
         $data = [
             'data' => $plannings,

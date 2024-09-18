@@ -21,6 +21,11 @@ class Professional extends Model
         return $this->belongsTo(Speciality::class, 'specialty_id');
     }
 
+    public function user()
+    {
+        return $this->hasMany(User::class, 'professional_id');
+    }
+
     public function getSpecialtyNameAttribute()
     {
         return $this->specialty ? $this->specialty->name : null;

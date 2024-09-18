@@ -461,7 +461,8 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
   "status_code": 200
 }
 ```
-
+    - Este endpoint acepta el filtro por query param: category siendo indiferente si pasas el id de la categoria por la que queres filtrar o el nombre de dicha categoria: `http://127.0.0.1:8000/api/plannings?category=1` `http://127.0.0.1:8000/api/plannings?category=powerlifting` 
+    
 2. para traer a una planificacion en particular tenemos que llamar al endpoint: `http://127.0.0.1:8000/api/plannings/<id-planning>` y obtendremos una respuesta como la siguiente:
 ``` JSON
 {
