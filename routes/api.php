@@ -19,8 +19,9 @@ Route::controller(CategoriesController::class)
     ->prefix('categories')
     ->group(function(){
         Route::get('/','all');
-        //    ->middleware(['auth:sanctum', 'authorizeRole:atlete']);
         Route::get('/{id}','getByID')->whereNumber('id');
+        Route::post('/', 'create')
+            ->middleware(['auth:sanctum', 'authorizeRole:admin']);
     });
 
 Route::controller(UsersController::class)

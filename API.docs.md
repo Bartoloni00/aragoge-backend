@@ -463,6 +463,15 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
 ```
     - Este endpoint acepta el filtro por query param: category siendo indiferente si pasas el id de la categoria por la que queres filtrar o el nombre de dicha categoria: `http://127.0.0.1:8000/api/plannings?category=1` `http://127.0.0.1:8000/api/plannings?category=powerlifting` 
     
+    - Filtrar por rango de precio: podemos utilizar los query params: "min_price" y "max_price" para obtener las planificaciones que esten en ese rango de precio.
+        - `http://127.0.0.1:8000/api/plannings?min_price=30` 
+        - `http://127.0.0.1:8000/api/plannings?max_price=40` 
+        - `http://127.0.0.1:8000/api/plannings?min_price=30&max_price=40` 
+
+    > [!INFO] 
+    >
+    > puedes utilizar los 3 query params juntos o por separadados ningun parametro es necesario para el endpoint en si mismo.
+
 2. para traer a una planificacion en particular tenemos que llamar al endpoint: `http://127.0.0.1:8000/api/plannings/<id-planning>` y obtendremos una respuesta como la siguiente:
 ``` JSON
 {

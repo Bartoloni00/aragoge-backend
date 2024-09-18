@@ -13,11 +13,34 @@ class PlanningsController extends Controller
     {
         $queryParams = $request->only(['category','min_price','max_price']);
 
-        if(!empty($queryParams['category'])){
-            $plannings = Planning::getPlanningsByCategoryFiltered($queryParams['category']);
-            if($plannings->count() < 1) return response()->json(['Error' => 'Plannings Not Found','status_code' => 404], 404);
+        // Aplicamos el filtro por categoría, si existe
+        if (!empty($queryParams['category'])) {
+        // Usamos tu método personalizado para filtrar por categoría
+        $plannings = Planning::getPlanningsByCategoryFiltered($queryParams['category']);
+        
+        // Si no se encuentran plannings por categoría, devolvemos un error
+        if ($plannings->count() < 1) {
+            return response()->json(['Error' => 'Plannings Not Found', 'status_code' => 404], 404);
+        }
         } else {
+            // Si no hay filtro de categoría, obtenemos todos los plannings
             $plannings = Planning::all();
+        }
+
+        // Filtrar por rango de precios
+        if (!empty($queryParams['min_price']) || !empty($queryParams['max_price'])) {
+            // Si ya tenemos plannings filtrados por categoría, continuamos filtrando sobre ellos
+            $plannings = $plannings->filter(function($planning) use ($queryParams) {
+                $minPrice = $queryParams['min_price'] ?? 0;  // Si no existe min_price, usar 0
+                $maxPrice = $queryParams['max_price'] ?? INF; // Si no existe max_price, usar infinito
+
+                return $planning->price >= $minPrice && $planning->price <= $maxPrice;
+            });
+            
+            // Verificamos si después del filtro quedan resultados
+            if ($plannings->count() < 1) {
+                return response()->json(['Error' => 'Plannings Not Found', 'status_code' => 404], 404);
+            }
         }
 
         $data = [
