@@ -25,4 +25,5 @@ class Category extends Model
         'name.max' => "Name max length: 60 ",
         'name.string' => "Name must be an string",
     ];
+    
 }

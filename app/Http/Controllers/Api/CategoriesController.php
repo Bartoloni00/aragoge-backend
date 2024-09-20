@@ -23,7 +23,14 @@ class CategoriesController extends Controller
 
     public function getByID(int $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'error'=> 'Category not found',
+                'status' => 404
+            ],404);
+        }
 
         $data = [
             'data' => $category,
@@ -63,5 +70,43 @@ class CategoriesController extends Controller
                 'error' => $th->getMessage()
             ], status: 500);
         }
+    }
+
+    public function delete(int $id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'error'=> 'Category not found',
+                'status' => 404
+            ],404);
+        }
+
+        $category->delete();
+
+        return response()->json([],204);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'error'=> 'Category not found',
+                'status' => 404
+            ],404);
+        }
+
+        $categoryData = $request->only(['name']);
+
+        $request->validate(Category::CREATE_RULES, Category::ERROR_MESSAGES);
+
+        $categoryData['updated_at'] = now();
+
+        $category->update($categoryData);
+
+        return response()->json(['Message' => 'Category with name: '. $categoryData['name'] . ' has updated succesfully' ], 200);
     }
 }

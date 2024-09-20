@@ -59,6 +59,7 @@ Los roles se pueden obtener desde dos rutas:
     }  
     ```
 
+
 ## Obtener Categorias
 Las categorias se pueden obtener desde dos rutas:
 1. `http://127.0.0.1:8000/api/categories`: Este enpoint devolvera todas las categorias que esten guardadas en la base de datos.
@@ -102,6 +103,36 @@ Las categorias se pueden obtener desde dos rutas:
     "status_code": 200
     }  
     ```
+
+## Crear categorias
+Utiliza el método POST en la ruta `http://127.0.0.1:8000/api/categories` , enviando la clave "name" en el body o formulario para añadir una nueva categoría.
+
+> [!IMPORTANT]
+>
+> **RUTA PROTEGIDA: Debes estar logueado y tener permisos de administrador para usar esta ruta.
+> Asegúrate de incluir el header "Accept" con el valor "application/json".
+> La autorización se realiza mediante un bearer token (como en el resto de la aplicación).
+
+
+## Actualizar categorias
+Utiliza el método PATCH en la ruta `http://127.0.0.1:8000/api/categories/<id-category>` , enviando la clave "name" en el body o formulario para actualizar el nombre de la categoría.
+
+<img style="margin: 10px" src="./docImages/editCategory.png" alt="Aragoge " style="margin:auto;" />
+
+> [!IMPORTANT]
+>
+> **RUTA PROTEGIDA: Debes estar logueado y tener permisos de administrador para usar esta ruta.
+> Asegúrate de incluir el header "Accept" con el valor "application/json".
+> La autorización se realiza mediante un bearer token (como en el resto de la aplicación).  
+
+## Delete categorias
+Utiliza el método DELETE en la ruta `http://127.0.0.1:8000/api/categories/<id-category>` , para eliminar una categoría.
+
+> [!IMPORTANT]
+>
+> **RUTA PROTEGADA: Debes estar logueado y tener permisos de administrador para usar esta ruta.
+> Asegúrate de incluir el header "Accept" con el valor "application/json".
+> La autorización se realiza mediante un bearer token (como en el resto de la aplicación).  
 
 ## Obtener las posibles especialidades de los profesionales
 Las categorias se pueden obtener desde dos rutas:

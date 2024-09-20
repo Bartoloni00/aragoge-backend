@@ -73,4 +73,12 @@ php artisan key:generate
 ``` Bash
 php artisan serve
 ``` 
+
+7. En caso de que ya tengas creada la base de datos y quiera restaurarla, ejecuta el siguiente comando:
+``` Bash
+php artisan migrate:fresh --seed
+```
+> [!INFO]
+>
+> La documentacion de la API se encuentra en el archivo [API.docs.md](https://github.com/Bartoloni00/aragoge-backend/blob/main/API.docs.md)
 </main>
