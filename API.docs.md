@@ -660,3 +660,54 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
     "status": 200
     }
     ```
+
+## Perfiles de profesionales
+Una vez que registras a tu usuario como un profesional podras crear tu perfil de profesional, para ello deberas hacer un POST a la siguiente ruta: `http://127.0.0.1:8000/api/professionals/profile` y enviar los siguientes parametros:
+
+- **description**: Una descripcion del perfil profesional.
+- **synopsis**: Una descripcion resumida del perfil profesional.
+- **specialty_id**: El id del specialty que pertenece a tu profesional (1, 2 o 3).
+
+**Ejemplo**:
+`http://127.0.0.1:8000/api/professionals/profile`
+
+```JSON
+{
+  "description": "Entrenador personal especializado en fuerza y acondicionamiento físico. Con amplia experiencia en diseño de programas de entrenamiento personalizados.",
+  "synopsis": "Ayuda a mis clientes a alcanzar sus objetivos de fitness de manera segura y efectiva. Mi enfoque se basa en la motivación y el seguimiento personalizado.",
+  "specialty_id": 1
+}
+```
+
+Una vez que hayas enviado los datos correctamente, deberias obtener un 200 OK y un json con el siguiente formato:
+
+```JSON
+{
+  "data": {
+    "id": 1,
+    "description": "Entrenador personal especializado en fuerza y acondicionamiento físico. Con amplia experiencia en diseño de programas de entrenamiento personalizados.",    
+    "synopsis": "Ayuda a mis clientes a alcanzar sus objetivos de fitness de manera segura y efectiva. Mi enfoque se basa en la motivación y el seguimiento personalizado.",
+    "specialty_id": 1,
+    "specialty_name": "trainer",
+    "created_at": "2024-09-16T22:27:26.000000Z",
+    "updated_at": null
+  },
+  "status_code": 200
+}
+```
+
+Si el registro de tu perfil de profesional falla, deberias obtener un 422 Unprocessable Entity y un json con el siguiente formato o un 404 Not found ya que no se encontro al usuario que se le asignara ese perfil de profesional.
+
+
+**¿Como indicar cual es el usuario al que se le asignara el perfil de profesional?**
+Esto lo sabemos gracias al bearer token con ese token identificamos al usuario verificamos que sea un profesional y asignamos el perfil de profesional a ese usuario.
+
+Para ello debes enviar el header "Accept" con el valor "application/json" en caso contrario te tirara un error de login.
+
+### Actualizar perfil de profesional
+Para actualizar el perfil de profesional debes hacer un PATCH a la siguiente ruta: `http://127.0.0.1:8000/api/professionals/profile` y enviar los siguientes parametros:
+
+**Los parametros son todos opcionales**
+- **description**: Una descripcion del perfil profesional.
+- **synopsis**: Una descripcion resumida del perfil profesional.
+- **specialty_id**: El id del specialty que pertenece a tu profesional (1, 2 o 3).

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\SpecialityController;
 use App\Http\Controllers\Api\SubscriptionsController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\ProfessionalController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(CategoriesController::class)
@@ -35,6 +36,16 @@ Route::controller(UsersController::class)
         Route::get('/{id}/plannings', 'getPlannings')
             ->whereNumber('id')
             ->middleware('role:professional,id');
+    });
+
+Route::controller(ProfessionalController::class)
+    ->prefix('professionals')
+    ->group(function(){
+        Route::post('/profile', 'createProfessionalProfile')
+            ->middleware(['auth:sanctum', 'authorizeRole:professional']);
+
+        Route::patch('/profile', 'updateProfessionalProfile')
+            ->middleware(['auth:sanctum', 'authorizeRole:professional']);
     });
 
 Route::controller(SpecialityController::class)

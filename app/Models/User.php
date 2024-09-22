@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\ProfessionalUser;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
@@ -114,7 +116,7 @@ class User extends Authenticatable
 
         if ($rol == 'professional') {
             foreach ($usersFiltered as $user) {
-                $user->professional_data = User::addProfessionalData($user);
+                $user->professional_data = ProfessionalUser::addProfessionalData($user);
             }
         }
 
@@ -126,26 +128,11 @@ class User extends Authenticatable
         $user = User::findOrFail($id);
 
         if ($user->rol_name == 'professional') {
-            $user->professional_data = User::addProfessionalData($user);
+            $user->professional_data = ProfessionalUser::addProfessionalData($user);
         }
 
         return $user;
     }
-    private static function addProfessionalData(User $professional): array
-    {
-       if ($professional->profession) {
-        $user = [];
-        $user['description'] = $professional->profession->description;
-        $user['synopsis'] = $professional->profession->synopsis;
-        $user['specialty_id'] = $professional->profession->specialty_id;
-        $user['specialty_name'] = $professional->profession->specialty_name;
-
-        return $user;
-       } else {
-        return  ['This professional dont have a profile yet'];
-       }
-    }
-
 
     public function hasRole($role)
     {
