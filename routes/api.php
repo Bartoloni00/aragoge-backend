@@ -36,6 +36,12 @@ Route::controller(UsersController::class)
         Route::get('/{id}/plannings', 'getPlannings')
             ->whereNumber('id')
             ->middleware('role:professional,id');
+
+        Route::patch('/update', 'update')
+            ->middleware('auth:sanctum');
+
+        Route::delete('/delete', 'delete')
+            ->middleware('auth:sanctum');
     });
 
 Route::controller(ProfessionalController::class)

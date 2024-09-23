@@ -440,6 +440,36 @@ Las categorias se pueden obtener desde dos rutas:
     }
     ```
     
+## Actualizar usuario
+LLamando a la ruta `http://127.0.0.1:8000/api/users/update` y enviando los siguientes parametros:
+
+**Los parametros son todos opcionales**
+- **first_name**: El nombre del usuario.
+- **last_name**: El apellido del usuario.
+- **email**: El email del usuario.
+- **role_id**: El id del rol del usuario (1, 2 o 3).
+
+**Ejemplo**:
+PATCH `http://127.0.0.1:8000/api/users/update`
+
+```JSON
+{
+  "first_name": "Abraham",
+  "last_name": "Bartoloni",
+  "email": "bartoloniabraham@gmail.com",
+  "role_id": 3
+}
+```
+cambiaras lso datos de ese usuario en concreo.
+> [!IMPORTANT]
+>
+> Si no envias ningun parametro, no se actualizara nada.
+> Si ASIGNAS UN VALOR NO VALIDO A UN PARAMETRO, te tirara un error de 422 Unprocessable Entity.
+> El usuario que se actualizara dependera del BEARER TOKEN que se envie.
+
+## Eliminar usuario
+LLamando a la ruta `http://127.0.0.1:8000/api/users/delete` con el metodo DELETE y enviando el bearer token de un usuario autenticado podras eliminar a dicho usuario
+
 ## Authenticacion y registro de usuarios
 1. Registro: 
 Temos que ingresar de forma obligatoria los siguientes campos:

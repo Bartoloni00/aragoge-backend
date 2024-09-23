@@ -59,6 +59,13 @@ class User extends Authenticatable
         ]
     ];
     
+    public const UPDATE_RULES = [
+        'first_name' => ['max:60'],
+        'last_name' => ['max:60'],
+        'email' => ['email'],
+        'rol_id' => ['in:2,3'],
+    ];
+
     public const ERROR_MESSAGES = [
         'first_name.required' => 'First name is a required fill',
         'first_name.max' => 'First name max length: 60',
@@ -125,7 +132,7 @@ class User extends Authenticatable
 
     public static function getUserByID(int $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
 
         if ($user->rol_name == 'professional') {
             $user->professional_data = ProfessionalUser::addProfessionalData($user);
