@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Planning;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,5 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PlanningsSeeder::class);
         $this->call(SubscriptionsSeeder::class);
         $this->call(PaymentsSeeder::class);
+
+        User::factory(50)->create();
+        Planning::factory(150)->create();
     }
 }
