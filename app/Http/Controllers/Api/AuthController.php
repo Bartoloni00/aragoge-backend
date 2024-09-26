@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -36,7 +37,7 @@ class AuthController extends Controller
 
             DB::commit();
 
-            return response()->json(data: ['message' => 'User with email: '. $dataUser['email'] . ' has created succesfully' ], status: 201);
+            return response()->json(data: ['message' => 'El usuario con el email: '. $dataUser['email'] . ' fue con exito' ], status: 201);
             
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
@@ -47,18 +48,18 @@ class AuthController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             DB::rollBack();
 
-            if ($e->getCode() == 23000) return response()->json(data: ['message' => 'It looks like this email is already registered. Please use a different one.', 400]);
+            if ($e->getCode() == 23000) return response()->json(data: ['errors' => ['Este email ya esta registrado. por favor, Intente con otro'], 400]);
 
             return response()->json(data: [
-                'message' => 'Database error occurred.',
-                'error' => $e->getMessage()
+                'message' => 'Error en la base de datos. Por favor, inténtelo de nuevo.',
+                'errors' => $e->getMessage()
             ], status: 500);
         } catch (\Throwable $th) {
             DB::rollBack();
     
             return response()->json(data: [
-                'message' => 'Unexpected error occurred. Please try again later.',
-                'error' => $th->getMessage()
+                'message' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'errors' => $th->getMessage()
             ], status: 500);
         }
     }
@@ -82,13 +83,13 @@ class AuthController extends Controller
     
         // Limitar el número de intentos de inicio de sesión
         if (RateLimiter::tooManyAttempts($request->ip(), 5)) {
-            return response()->json(['error' => 'Too many attempts. Try again later.'], 429);
+            return response()->json(['errors' => 'Demasiados intentos, reintentelo mas tarde.'], 429);
         }
     
         // Verificar las credenciales del usuario
         if (!Auth::attempt($credentials)) {
             RateLimiter::hit($request->ip());
-            return response()->json(['error' => 'Email or password is incorrect, try again'], 401);
+            return response()->json(['errors' => 'El email o la contraseña es incorrecta, intente nuevamente'], 401);
         }
     
         // Limpiar los intentos fallidos si el inicio de sesión es exitoso
@@ -102,7 +103,7 @@ class AuthController extends Controller
         
     
         return response()->json([
-            'message' => 'Successful login',
+            'message' => 'Inicio de sesiòn exitoso',
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user
@@ -111,11 +112,18 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        try {
+            auth()->user()->tokens()->delete();
 
-        return response()->json(
-            ['message' => 'succesfull logout'],
-            204
-        );
+            return response()->json(
+                ['message' => 'La sesiòn ha sido cerrada correctamente'],
+                204
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                ['errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.', 'message' => $th->getMessage()],
+                500
+            );
+        }
     }
 }

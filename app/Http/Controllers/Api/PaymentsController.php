@@ -24,6 +24,13 @@ class PaymentsController extends Controller
     {
         $payment = Payment::find($id);
 
+        if (!$payment) {
+            return response()->json([
+                'errors'=> 'El pago no fue encontrado',
+                'status' => 404
+            ],404);
+        }
+
         $data = [
             'data' => $payment,
             'status' => 200

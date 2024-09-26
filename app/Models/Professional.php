@@ -32,11 +32,11 @@ class Professional extends Model
     ];
 
     public const ERROR_MESSAGES = [
-        'description.required' => 'Description is a required fill',
-        'synopsis.required' => 'Synopsis is a required fill',
-        'specialty_id.required' => 'Specialty ID is required',
-        'specialty_id.integer' => 'Specialty ID must be an integer',
-        'specialty_id.in' => 'Specialty ID must be either 1, 2 or 3',
+        'description.required' => 'Descripcion es un campo obligatorio',
+        'synopsis.required' => 'Sinopsis es un campo obligatorio',
+        'specialty_id.required' => 'La especialidad es un campo obligatorio',
+        'specialty_id.integer' => 'La especialidad tiene que tener un valor numerico',
+        'specialty_id.in' => 'La especialidad tiene que ser un valor: 1, 2 o 3',
     ];
 
     public function profession()

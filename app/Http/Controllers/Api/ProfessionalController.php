@@ -10,24 +10,32 @@ class ProfessionalController extends Controller
 {
     public function createProfessionalProfile(Request $request)
     {
-        $user = $request->user();
-        $professionalProfileData = $request->only(['description', 'synopsis', 'specialty_id']);
+        try {
+            $user = $request->user();
+            $professionalProfileData = $request->only(['description', 'synopsis', 'specialty_id']);
 
-        $request->validate(Professional::CREATE_RULES, Professional::ERROR_MESSAGES);
+            $request->validate(Professional::CREATE_RULES, Professional::ERROR_MESSAGES);
 
-        $professionalProfileData['created_at'] = now();
-        $professionalProfileData['updated_at'] = now(); 
+            $professionalProfileData['created_at'] = now();
+            $professionalProfileData['updated_at'] = now(); 
 
-        $professional = Professional::create($professionalProfileData);
+            $professional = Professional::create($professionalProfileData);
 
-        $user->update(['professional_id' => $professional->id]);
+            $user->update(['professional_id' => $professional->id]);
 
-        $data = [
-            'data' => $professional,
-            'status_code' => 201
-        ];
+            $data = [
+                'message' => 'Perfil profesional creado exitosamente',
+                'data' => $professional,
+                'status_code' => 201
+            ];
 
-        return response()->json($data, 201);
+            return response()->json($data, 201);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     public function updateProfessionalProfile(Request $request)
@@ -43,7 +51,7 @@ class ProfessionalController extends Controller
 
         if(!$professional){
             return response()->json([
-                'message' => 'Professional not found',
+                'message' => 'El profesional no fue encontrado',
                 'status_code' => 404
             ], 404);
         }
@@ -51,6 +59,7 @@ class ProfessionalController extends Controller
         $professional->update($professionalProfileData);
 
         $data = [
+            'message' => 'Perfil profesional editado exitosamente',
             'data' => $professional,
             'status_code' => 200
         ];

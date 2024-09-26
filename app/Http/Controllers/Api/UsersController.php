@@ -21,7 +21,7 @@ class UsersController extends Controller
         } else {
             $users = User::all();
         }
-        if($users->count() < 1) return response()->json(['Error' => 'Users Not Found','status_code' => 404], 404);
+        if($users->count() < 1) return response()->json(['errors' => 'Usuarios no encontrados','status_code' => 404], 404);
 
         $data = [
             'data' => $users,
@@ -34,7 +34,7 @@ class UsersController extends Controller
     public function getByID(int $id)
     {
         $user = User::getUserByID($id);
-        if(!$user) return response()->json(['Error' => 'User Not Found','status_code' => 404], 404);
+        if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
 
         $data = [
             'data' => $user,
@@ -48,6 +48,8 @@ class UsersController extends Controller
     {
         $subscriptions = Subscription::getSubscriptionsByUser($id);
 
+        if ($subscriptions->count() < 1) $subscriptions = 'Este usuario todavia no se ha subscrito a ninguna planificacion.';
+
         $data = [
             'data' => $subscriptions,
             'status_code' => 200
@@ -60,7 +62,7 @@ class UsersController extends Controller
     {
         $plannings = Planning::getPlanningsByProfessional($id);
 
-        if ($plannings->count() < 1) $plannings = 'This professional dont have plannigs yet';
+        if ($plannings->count() < 1) $plannings = 'Este profesional todavia no ha creado ninguna planificacion.';
         
         $data = [
             'data' => $plannings ,
@@ -74,7 +76,7 @@ class UsersController extends Controller
     {
         $user = $request->user();
 
-        if(!$user) return response()->json(['Error' => 'User Not Found','status_code' => 404], 404);
+        if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
 
         $request->validate(User::UPDATE_RULES, User::ERROR_MESSAGES);
         $updateUserData = $request->only(['first_name', 'last_name', 'email', 'role_id']);
@@ -84,6 +86,7 @@ class UsersController extends Controller
         $user->update($updateUserData);
 
         $data = [
+            'message' => 'Datos del usuario actualizados exitosamente',
             'data' => $user,
             'status_code' => 200
         ];
@@ -97,10 +100,10 @@ class UsersController extends Controller
 
         try {
             DB::beginTransaction();
-            if(!$user) return response()->json(['Error' => 'User Not Found','status_code' => 404], 404);
+            if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
 
             $data = [
-                'data' => 'User Deleted',
+                'data' => 'Usuario borrado exitosamente',
                 'status_code' => 200
             ];
 
@@ -121,16 +124,16 @@ class UsersController extends Controller
             DB::rollBack();
 
             return response()->json(data: [
-                'message' => 'Database error occurred.',
-                'error' => $e->getMessage()
+                'errors' => 'Ocurrior un error en la base de datos.',
+                'message' => $e->getMessage()
             ], status: 500);
         } catch (\Throwable $th) {
             DB::rollBack();
             
 
             return response()->json(data: [
-                'message' => 'Unexpected error occurred. Please try again later.',
-                'error' => $th->getMessage()
+                'errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'message' => $th->getMessage()
             ], status: 500);
         }
     }

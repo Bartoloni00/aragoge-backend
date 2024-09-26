@@ -24,6 +24,13 @@ class RolesController extends Controller
     {
         $rol = Rol::findOrFail($id);
 
+        if (!$rol) {
+            return response()->json([
+                'errors'=> 'El rol no fue encontrado',
+                'status' => 404
+            ],404);
+        }
+
         $data = [
             'data' => $rol,
             'status_code' => 200

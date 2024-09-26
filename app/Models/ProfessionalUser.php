@@ -20,7 +20,7 @@ class ProfessionalUser extends User
 
         return $user;
        } else {
-        return  ['This professional dont have a profile yet'];
+        return  ['Este usuario todavia no tiene un perfil profesional asignado'];
        }
     }
 }

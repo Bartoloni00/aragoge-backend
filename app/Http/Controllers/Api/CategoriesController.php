@@ -27,7 +27,7 @@ class CategoriesController extends Controller
 
         if (!$category) {
             return response()->json([
-                'error'=> 'Category not found',
+                'error'=> 'La categoria no fue encontrada',
                 'status' => 404
             ],404);
         }
@@ -55,7 +55,7 @@ class CategoriesController extends Controller
 
             DB::commit();
 
-            return response()->json(data: ['message' => 'Category with name: '. $categotyData['name'] . ' has created succesfully' ], status: 201);
+            return response()->json(data: ['message' => 'La categoria: '. $categotyData['name'] . ' fue agregada exitosamente' ], status: 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return response()->json(data: [
@@ -66,8 +66,8 @@ class CategoriesController extends Controller
             DB::rollBack();
     
             return response()->json(data: [
-                'message' => 'Unexpected error occurred. Please try again later.',
-                'error' => $th->getMessage()
+                'message' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'errors' => $th->getMessage()
             ], status: 500);
         }
     }
@@ -78,7 +78,7 @@ class CategoriesController extends Controller
 
         if (!$category) {
             return response()->json([
-                'error'=> 'Category not found',
+                'error'=> 'La categoría no fue encontrada',
                 'status' => 404
             ],404);
         }
@@ -94,7 +94,7 @@ class CategoriesController extends Controller
 
         if (!$category) {
             return response()->json([
-                'error'=> 'Category not found',
+                'error'=> 'La categoría no fue encontrada',
                 'status' => 404
             ],404);
         }
@@ -107,6 +107,6 @@ class CategoriesController extends Controller
 
         $category->update($categoryData);
 
-        return response()->json(['Message' => 'Category with name: '. $categoryData['name'] . ' has updated succesfully' ], 200);
+        return response()->json(['Message' => 'La categoria: '. $categoryData['name'] . ' fue editada exitosamente' ], 200);
     }
 }

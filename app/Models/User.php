@@ -67,17 +67,17 @@ class User extends Authenticatable
     ];
 
     public const ERROR_MESSAGES = [
-        'first_name.required' => 'First name is a required fill',
-        'first_name.max' => 'First name max length: 60',
-        'last_name.required' => 'Last name is a required fill',
-        'last_name.max' => 'Last name max length: 60',
-        'email.required' => 'Email is required',
-        'email.email' => 'This must be an email',
-        'rol_id.required' => 'Role ID is required',
-        'rol_id.in' => 'Role ID must be either 2 or 3', // Para los valores permitidos de rol
-        'password.required' => 'Password is required',
-        'password.min' => 'Password must have at least 6 characters',
-        'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+        'first_name.required' => 'El nombre es un campo obligatorio',
+        'first_name.max' => 'El nombre puede tener un maximo de 60 caracteres',
+        'last_name.required' => 'El apellido es un campo obligatorio',
+        'last_name.max' => 'El apellido puede tener un maximo de 60 caracteres',
+        'email.required' => 'Email es un campo obligatorio',
+        'email.email' => 'El campo email debe ser un email válido',
+        'rol_id.required' => 'El rol es un campo obligatorio',
+        'rol_id.in' => 'Rol tiene que tener el valor 2 o 3',
+        'password.required' => 'La contraseña es un campo obligatorio',
+        'password.min' => 'La contraseña debe tener al menos 6 caracteres',
+        'password.regex' => 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula y un número',
     ];
 
     /**

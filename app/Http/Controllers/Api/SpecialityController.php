@@ -24,6 +24,13 @@ class SpecialityController extends Controller
     {
         $speciality = Speciality::findOrFail($id);
 
+        if (!$speciality) {
+            return response()->json([
+                'errors'=> 'La especialidad no fue encontrada',
+                'status' => 404
+            ],404);
+        }
+
         $data = [
             'data' => $speciality,
             'status_code' => 200

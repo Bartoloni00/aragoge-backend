@@ -21,9 +21,9 @@ class Category extends Model
     ];
     
     public const ERROR_MESSAGES = [
-        'name.required' => 'Name is a required fill',
-        'name.max' => "Name max length: 60 ",
-        'name.string' => "Name must be an string",
+        'name.required' => 'El nombre de un campo obligatorio',
+        'name.max' => "El nombre debe contener un maximo de 60 caracteres",
+        'name.string' => "El nombre debe ser una cadena de texto",
     ];
     
 }

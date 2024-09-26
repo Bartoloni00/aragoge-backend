@@ -46,7 +46,7 @@ class Subscription extends Model
             $query->where('id', $planning_id);
         })->get();
 
-        if ($subscriptionsByPlanning->count() < 1) return "This planning doesn't have subscriptions yet.";
+        if ($subscriptionsByPlanning->count() < 1) return "Esta planificacion todavia no tiene ninguna subscripcion.";
 
         return $subscriptionsByPlanning;
     }
