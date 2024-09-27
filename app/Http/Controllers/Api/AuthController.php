@@ -48,7 +48,9 @@ class AuthController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             DB::rollBack();
 
-            if ($e->getCode() == 23000) return response()->json(data: ['errors' => ['Este email ya esta registrado. por favor, Intente con otro'], 400]);
+            if ($e->getCode() == 23000) return response()->json(
+                data: ['errors' => ['email'=>['Este email ya esta registrado. por favor, Intente con otro']]], 
+                status: 422);
 
             return response()->json(data: [
                 'message' => 'Error en la base de datos. Por favor, inténtelo de nuevo.',
