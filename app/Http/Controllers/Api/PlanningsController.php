@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Planning;
+use App\Models\ProfessionalUser;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 
@@ -84,5 +85,24 @@ class PlanningsController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function delete(int $id)
+    {
+        $planning = Planning::find($id);
+        //la validacion de esta planning se hizo en el middleware "ismyplanningmiddleware"
+
+        $subscriptions = Subscription::getSubscriptionsByPlanningID($id);
+
+        if (is_array($subscriptions) && $subscriptions->count() > 0) {
+            return response()->json([
+                'errors'=> 'No se puede eliminar una planificación con sus subscripciones',
+                'status' => 400
+            ],400);
+        }
+
+        $planning->delete();
+
+        return response()->json(['message' => 'La planificación ha sido eliminada correctamente', 'status_code' => 204], 204);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
+use App\Models\Planning;
 
 class ProfessionalUser extends User
 {
@@ -22,5 +23,16 @@ class ProfessionalUser extends User
        } else {
         return  ['Este usuario todavia no tiene un perfil profesional asignado'];
        }
+    }
+
+    public static function isMyPlanning(int $userId, int $planningId)
+    {
+        $planning = Planning::find($planningId);
+        if(!$planning) throw new Exception("La planificacion no fue encontrada", 1);
+        
+        $user = User::find($userId);
+        if($user->profession->id == $planning->professional_id) return true;
+
+        return false;
     }
 }

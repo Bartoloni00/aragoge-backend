@@ -67,6 +67,10 @@ Route::controller(PlanningsController::class)
         Route::get('/', 'getPlannings');
         Route::get('/{id}', 'getPlanningByID')->whereNumber('id');
         Route::get('/{id}/subscriptions', 'getSubscriptionsForThisPlanning')->whereNumber('id');
+
+        Route::delete('/{id}', 'delete')
+            ->middleware(['auth:sanctum', 'authorizeRole:professional', 'isMyPlanning'])
+            ->whereNumber('id');
     });
 
 Route::controller(RolesController::class)

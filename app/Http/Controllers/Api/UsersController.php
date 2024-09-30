@@ -60,7 +60,10 @@ class UsersController extends Controller
 
     public function getPlannings(int $id)
     {
-        $plannings = Planning::getPlanningsByProfessional($id);
+        $user = User::find($id);
+        if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
+
+        $plannings = Planning::getPlanningsByProfessional($user->professional_id);
 
         if ($plannings->count() < 1) $plannings = 'Este profesional todavia no ha creado ninguna planificacion.';
         
