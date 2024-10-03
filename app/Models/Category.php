@@ -26,4 +26,11 @@ class Category extends Model
         'name.string' => "El nombre debe ser una cadena de texto",
     ];
     
+
+    public static function isValidCategoryId(int $id)
+    {
+        $category = Category::find($id);
+        if(!$category) return false;
+        return true;
+    }
 }

@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Planning;
 use App\Models\ProfessionalUser;
 use App\Models\Subscription;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlanningsController extends Controller
 {
@@ -85,6 +88,66 @@ class PlanningsController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function create(Request $request)
+    {
+       try {
+            DB::beginTransaction();
+
+            $request->validate(Planning::CREATE_RULES, Planning::ERROR_MESSAGES);
+
+            if(!Category::isValidCategoryId($request->category_id)) {
+                return response()->json([
+                    'errors' => [
+                        'category_id' => [
+                            'Debes asignar una categoría válida'
+                        ]
+                    ], 
+                    'status_code' => 422
+                ], 422);
+            }
+            
+
+            $dataPlanning = $request->only(keys: [
+                'title',
+                'description',
+                'synopsis',
+                'price',
+                'category_id',
+                'image_id',
+            ]);
+
+            $dataPlanning['create_at'] = now();
+            $dataPlanning['updated_at'] = now();
+
+            $user = User::find($request->user()->id);
+
+            $dataPlanning['professional_id'] = $user->professional_id;
+
+            $planning = Planning::create(attributes: $dataPlanning);
+
+            DB::commit();
+
+            return response()->json(data: [
+                'message' => 'La planificación ha sido creada correctamente', 
+                "data" => $planning
+            ], status: 201);
+
+       } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return response()->json(data: [
+                'errors' => $e->errors()
+            ], status: 422);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+    
+            return response()->json(data: [
+                'message' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'errors' => $th->getMessage()
+            ], status: 500);
+        }
     }
 
     public function delete(int $id)

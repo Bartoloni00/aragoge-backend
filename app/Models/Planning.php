@@ -12,6 +12,42 @@ class Planning extends Model
 
     protected $hidden = ['professional', 'category'];
 
+    protected $fillable = [
+        'title',
+        'description',
+        'synopsis',
+        'price',
+        'category_id',
+        'image_id',
+        'professional_id',
+        'created_at',
+        'updated_at',
+    ];
+
+    // professional_id es obligatorio pero ya que lo agregamos utilizando el bearer token no es necesario.
+    public const CREATE_RULES = [
+        'title' => 'required|string',
+        'description' => 'required|string',
+        'synopsis' => 'required|string',
+        'price' => 'required|numeric',
+        'category_id' => 'required|integer',
+        'image_id' => 'integer',
+    ];
+
+    public const ERROR_MESSAGES = [
+        'title.required' => 'El campo "Título" es obligatorio',
+        'title.string' => 'El campo "Título" debe ser una cadena de caracteres',
+        'description.required' => 'El campo "Descripción" es obligatorio',
+        'description.string' => 'El campo "Descripción" debe ser una cadena de caracteres',
+        'synopsis.required' => 'El campo "Sinopsis" es obligatorio',
+        'synopsis.string' => 'El campo "Sinopsis" debe ser una cadena de caracteres',
+        'price.required' => 'El campo "Precio" es obligatorio',
+        'price.numeric' => 'El campo "Precio" debe ser un número',
+        'category_id.required' => 'El campo "Categoría" es obligatorio',
+        'category_id.integer' => 'El campo "Categoría" debe ser un número entero',
+        'image_id.integer' => 'El campo "Imagen" debe ser un número entero',
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
