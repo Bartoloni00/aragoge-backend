@@ -150,6 +150,43 @@ class PlanningsController extends Controller
         }
     }
 
+    public function update(Request $request, int $id)
+    {
+        $planning = Planning::find($id);
+        //la validacion de esta planning se hizo en el middleware "ismyplanningmiddleware"
+        
+        $request->validate(Planning::UPDATE_RULES, Planning::ERROR_MESSAGES);
+        
+        $dataPlanning = $request->only(keys: [
+            'title',
+            'description',
+            'synopsis',
+            'price',
+            'category_id',
+            'image_id',
+        ]);
+
+        if($request->category_id && !Category::isValidCategoryId($request->category_id)) {
+            return response()->json([
+                'errors' => [
+                    'category_id' => [
+                        'Debes asignar una categoría válida'
+                    ]
+                ], 
+                'status_code' => 422
+            ], 422);
+        }
+        
+        $dataPlanning['updated_at'] = now();
+        
+        $planning->update($dataPlanning);
+        
+        return response()->json(data: [
+            'message' => 'La planificación ha sido actualizada correctamente', 
+            "data" => $planning
+        ], status: 200);
+    }
+
     public function delete(int $id)
     {
         $planning = Planning::find($id);

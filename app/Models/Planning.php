@@ -34,6 +34,15 @@ class Planning extends Model
         'image_id' => 'integer',
     ];
 
+    public const UPDATE_RULES = [
+        'title' => 'string',
+        'description' => 'string',
+        'synopsis' => 'string',
+        'price' => 'numeric',
+        'category_id' => 'integer',
+        'image_id' => 'integer',
+    ];
+
     public const ERROR_MESSAGES = [
         'title.required' => 'El campo "Título" es obligatorio',
         'title.string' => 'El campo "Título" debe ser una cadena de caracteres',

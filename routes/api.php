@@ -71,6 +71,10 @@ Route::controller(PlanningsController::class)
         Route::post('/', 'create')
         ->middleware(['auth:sanctum', 'authorizeRole:professional']);
 
+        Route::patch('/{id}', 'update')
+            ->middleware(['auth:sanctum','authorizeRole:professional', 'isMyPlanning'])
+            ->whereNumber('id');
+
         Route::delete('/{id}', 'delete')
             ->middleware(['auth:sanctum', 'authorizeRole:professional', 'isMyPlanning'])
             ->whereNumber('id');
