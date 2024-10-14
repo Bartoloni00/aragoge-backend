@@ -580,6 +580,42 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
 }
 ```
 
+## Crear una nueva planificacion
+`http://127.0.0.1:8000/api/plannings`: Esta ruta crea una nueva planificacion.
+- **Method**: POST
+
+**Ejemplo**:
+<img style="margin: 10px" src="./docImages/CreatePlanning.png" alt="Aragoge " style="margin:auto;" />
+
+> [!IMPORTANT]
+> Se requiere de un token de autenticacion para acceder a esta ruta.
+> el token debe pertenecear a un profesional registrado en el sistema.
+> enviar el header de accept: aplication/json
+
+## editar una planificacion
+`http://127.0.0.1:8000/api/plannings/{id}`: Esta ruta crea una nueva planificacion.
+- **Method**: PATCH
+
+**Ejemplo**:
+<img style="margin: 10px" src="./docImages/EditPlanning.png" alt="Aragoge " style="margin:auto;" />
+
+> [!IMPORTANT]
+> Se requiere de un token de autenticacion para acceder a esta ruta.
+> el token debe pertenecear a un profesional registrado en el sistema.
+> enviar el header de accept: aplication/json
+
+## Eliminar una planificacion
+`http://127.0.0.1:8000/api/plannings/{id}`: Esta ruta crea una nueva planificacion.
+- **Method**: DELETE
+
+**Ejemplo**:
+<img style="margin: 10px" src="./docImages/DeletePlanning.png" alt="Aragoge " style="margin:auto;" />
+
+> [!IMPORTANT]
+> Se requiere de un token de autenticacion para acceder a esta ruta.
+> el token debe pertenecear a un profesional registrado en el sistema.
+> enviar el header de accept: aplication/json
+
 ## Obtener subscripciones
 1. `http://127.0.0.1:8000/api/subscriptions`: Esta ruta devolvera todas las subscripciones que esten guardadas en la base de datos.
     - **Method**: GET

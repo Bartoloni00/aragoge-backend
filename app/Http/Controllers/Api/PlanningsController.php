@@ -78,7 +78,7 @@ class PlanningsController extends Controller
     {
         $subscriptions = Subscription::getSubscriptionsByPlanningID($id);
         
-        if ($subscriptions->count() < 1) {
+        if (is_string($subscriptions) || $subscriptions->count() < 1) {
             return response()->json(['errors' => 'No se encontraron subscripciones para esta planificacion', 'status_code' => 404], 404);
         }
 
