@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Models\Planning;
 use Illuminate\Http\Request;
 
 class SubscriptionsController extends Controller
@@ -37,5 +38,13 @@ class SubscriptionsController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function subscripting(Request $request,int $planningId){
+        $planning = Planning::find($planningId);
+
+        if(!$planning) return response()->json(['errors'=> 'NO se ha encontrado la planificacion solicitada'], 404);
+
+        return response()->json(['planning id'=> $planning], 200);
     }
 }

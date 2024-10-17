@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'authorizeRole' => \App\Http\Middleware\AuthorizeRoleMiddleware::class,
             'isMyPlanning' => \App\Http\Middleware\IsMyPlanningMiddleware::class,
+            'isNotMyPlanning' => \App\Http\Middleware\isNotMyPlanningMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

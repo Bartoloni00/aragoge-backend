@@ -92,8 +92,11 @@ Route::controller(SubscriptionsController::class)
     ->group(function(){
         Route::get('/', 'getSubscriptions');
         Route::get('/{id}', 'getSubscriptionByID')->whereNumber('id');
+                
+        Route::post('/{planningId}', 'subscripting')
+        ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning'])
+        ->whereNumber('planningId');
     });
-
 Route::controller(AuthController::class)->group(callback: function(): void{
     Route::post(uri: '/register', action: 'register');
     Route::post(uri: '/login', action: 'login');
