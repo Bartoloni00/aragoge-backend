@@ -34,7 +34,7 @@ class IsSubscritedMiddleware
                 return $next($request);
             }
         } else {
-            if (Subscription::IsUserSuscriptedToPlanning($userId, $planningId)) {
+            if (!Subscription::IsUserSuscriptedToPlanning($userId, $planningId)) {
                 return response()->json(['errors' => 'No estas suscrito a esta planificacion'], 403);
             }else{
                 return $next($request);

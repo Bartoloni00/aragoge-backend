@@ -40,7 +40,8 @@ class SubscriptionsController extends Controller
         return response()->json($data,200);
     }
 
-    public function subscripting(Request $request,int $planningId){
+    public function subscripting(Request $request,int $planningId)
+    {
         // en el middleware verificamos que la planificacion exista
         try {
             $subscription = Subscription::create([
@@ -56,6 +57,20 @@ class SubscriptionsController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['errors'=> 'Algo salio mal, no fue posible crear la subscripcion', 'error' => $th], 500);
 
+        }
+    }
+
+    public function renewSubscription(Request $request, int $planningId)
+    {
+        try {
+            $user_id = $request->user()->id;
+
+            // Renovamos la suscripcion por 30 dias mas
+            $subscription = Subscription::renew($user_id, $planningId);
+    
+            return response()->json(['data'=> $subscription], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['errors'=> 'Algo salio mal, no fue posible renovar la subscripcion', 'error' => $th], 500);
         }
     }
 }

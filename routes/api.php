@@ -98,10 +98,13 @@ Route::controller(SubscriptionsController::class)
         // - su rol sea atleta o profesional, 
         // -la planificacion no sea suya
         // - que no este suscrito a la misma
-        Route::post('/{planningId}', 'subscripting')
+        Route::post('/subscripting/{planningId}', 'subscripting')
         ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning', 'isSubscrited:false'])
         ->whereNumber('planningId');
 
+        Route::post('/renew/{planningId}', 'renewSubscription')
+            ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning', 'isSubscrited:true'])
+            ->whereNumber('planningId');
     });
 
 Route::controller(AuthController::class)->group(callback: function(): void{

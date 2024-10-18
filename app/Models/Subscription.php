@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Subscription extends Model
 {
@@ -58,5 +59,19 @@ class Subscription extends Model
         return self::where('user_id', $userId)
                     ->where('planning_id', $planningId)
                     ->exists();
+    }
+
+    public static function renew(int $userId, int $planning_id): Subscription
+    {
+        $subscription = Subscription::where('user_id', $userId)
+            ->where('planning_id', $planning_id)
+            ->firstOrFail();
+    
+        $subscription->update([
+            'expiration_date' => Carbon::parse($subscription->expiration_date)->addMonth(),
+            'updated_at' => now()
+        ]);
+    
+        return $subscription;
     }
 }
