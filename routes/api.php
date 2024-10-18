@@ -93,10 +93,17 @@ Route::controller(SubscriptionsController::class)
         Route::get('/', 'getSubscriptions');
         Route::get('/{id}', 'getSubscriptionByID')->whereNumber('id');
                 
+        // Con los middlewares de la siguiente ruta comprobamos que: 
+        // - el usuario este logueado, 
+        // - su rol sea atleta o profesional, 
+        // -la planificacion no sea suya
+        // - que no este suscrito a la misma
         Route::post('/{planningId}', 'subscripting')
-        ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning'])
+        ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning', 'isSubscrited:false'])
         ->whereNumber('planningId');
+
     });
+
 Route::controller(AuthController::class)->group(callback: function(): void{
     Route::post(uri: '/register', action: 'register');
     Route::post(uri: '/login', action: 'login');

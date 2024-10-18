@@ -9,6 +9,8 @@ class Subscription extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'planning_id', 'subscription_date', 'expiration_date', 'is_active', 'created_at'];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -49,5 +51,12 @@ class Subscription extends Model
         if ($subscriptionsByPlanning->count() < 1) return "Esta planificacion todavia no tiene ninguna subscripcion.";
 
         return $subscriptionsByPlanning;
+    }
+
+    public static function IsUserSuscriptedToPlanning(int $userId, int $planningId): bool
+    {
+        return self::where('user_id', $userId)
+                    ->where('planning_id', $planningId)
+                    ->exists();
     }
 }

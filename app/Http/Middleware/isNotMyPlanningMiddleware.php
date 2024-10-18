@@ -28,10 +28,14 @@ class isNotMyPlanningMiddleware
                 'status' => 404
             ],404);
         }
+        if ($request->user()->rol->name === 'professional') {
+            
+            // Negamos la condicion
+            if(!ProfessionalUser::isMyPlanning($request->user()->id, $planning->id)) return $next($request);
+            
+            return response()->json(['errors' => 'No puedes suscribirte a una planificacion que te pertenece', 'status_code' => 403], 403);
+        }
 
-        // Negamos la condicion
-        if(!ProfessionalUser::isMyPlanning($request->user()->id, $planning->id)) return $next($request);
-        
-        return response()->json(['errors' => 'No puedes suscribirte a una planificacion que te pertenece', 'status_code' => 403], 403);
+        return $next($request);
     }
 }

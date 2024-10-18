@@ -41,10 +41,21 @@ class SubscriptionsController extends Controller
     }
 
     public function subscripting(Request $request,int $planningId){
-        $planning = Planning::find($planningId);
+        // en el middleware verificamos que la planificacion exista
+        try {
+            $subscription = Subscription::create([
+                'user_id' => $request->user()->id,
+                'planning_id' => $planningId,
+                'subscription_date' => date('Y-m-d'),
+                'expiration_date' => date('Y-m-d', strtotime('+1 month')),
+                'is_active' => 1,
+                'created_at' => now(),
+            ]);
+    
+            return response()->json(['data'=> $subscription], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['errors'=> 'Algo salio mal, no fue posible crear la subscripcion', 'error' => $th], 500);
 
-        if(!$planning) return response()->json(['errors'=> 'NO se ha encontrado la planificacion solicitada'], 404);
-
-        return response()->json(['planning id'=> $planning], 200);
+        }
     }
 }
