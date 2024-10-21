@@ -679,6 +679,23 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
     }
     ```
 
+3. Suscribirse a una planificacion
+    - **Method**: POST
+    `http://127.0.0.1:8000/api/subscriptions/subscribing/{planningId}`
+
+    Enviando el id de la planificacion como parametro en la ruta y el token de autenticacion podemos suscribirnos a la planificacion. siempre y cuando el usuario sea un atleta o un profesional el cual no sea dueño de dicha planificacion. Ademas obviamente no debe poder estar ya suscrito a dicha planificacion.
+
+4. Renovar una subscripcion
+    - **Method**: POST
+    `http://127.0.0.1:8000/api/subscriptions/renew/{planningId}`
+
+    Enviando el id de la planificacion como parametro en la ruta y el token de autenticacion podemos renovar nuestra suscripcion a la planificacion. siempre y cuando el usuario sea un atleta o un profesional el cual no sea dueño de dicha planificacion. Ademas obviamente ya debebom estar suscrito a dicha planificacion.
+
+5. Renovar una subscripcion
+    - **Method**: POST
+    `http://127.0.0.1:8000/api/subscriptions/unsuscribing/{planningId}`
+
+    Enviando el id de la planificacion como parametro en la ruta y el token de autenticacion podemos cancelar nuestra suscripcion a la planificacion. logicamente ya tenemos que estar suscrito a dicha planificacion con anterioridad.
 ## Obtener pagos
 1. `http://127.0.0.1:8000/api/payments`: Esta ruta devolveran todos los pagos que esten guardados en la base de datos.
     - **Method**: GET
@@ -726,6 +743,7 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
     "status": 200
     }
     ```
+
 
 ## Perfiles de profesionales
 Una vez que registras a tu usuario como un profesional podras crear tu perfil de profesional, para ello deberas hacer un POST a la siguiente ruta: `http://127.0.0.1:8000/api/professionals/profile` y enviar los siguientes parametros:

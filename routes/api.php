@@ -105,6 +105,10 @@ Route::controller(SubscriptionsController::class)
         Route::post('/renew/{planningId}', 'renewSubscription')
             ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning', 'isSubscrited:true'])
             ->whereNumber('planningId');
+
+        Route::post('/unsubscribing/{planningId}', 'unsubscribing')
+            ->middleware(['auth:sanctum', 'authorizeRole:professional,atlete', 'isNotMyPlanning', 'isSubscrited:true'])
+            ->whereNumber('planningId');
     });
 
 Route::controller(AuthController::class)->group(callback: function(): void{

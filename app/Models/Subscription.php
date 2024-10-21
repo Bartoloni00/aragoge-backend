@@ -74,4 +74,18 @@ class Subscription extends Model
     
         return $subscription;
     }
+
+    public static function unsubscribing(int $userId, int $planning_id): Subscription
+    {
+        $subscription = Subscription::where('user_id', $userId)
+            ->where('planning_id', $planning_id)
+            ->firstOrFail();
+    
+        $subscription->update([
+            'is_active' => 0,
+            'updated_at' => now()
+        ]);
+    
+        return $subscription;
+    }
 }

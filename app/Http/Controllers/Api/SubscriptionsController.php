@@ -42,7 +42,7 @@ class SubscriptionsController extends Controller
 
     public function subscripting(Request $request,int $planningId)
     {
-        // en el middleware verificamos que la planificacion exista
+        // en el middleware "isNotMyPlanning" verificamos que la planificacion exista
         try {
             $subscription = Subscription::create([
                 'user_id' => $request->user()->id,
@@ -62,6 +62,7 @@ class SubscriptionsController extends Controller
 
     public function renewSubscription(Request $request, int $planningId)
     {
+        // en el middleware "isNotMyPlanning" verificamos que la planificacion exista
         try {
             $user_id = $request->user()->id;
 
@@ -70,7 +71,22 @@ class SubscriptionsController extends Controller
     
             return response()->json(['data'=> $subscription], 201);
         } catch (\Throwable $th) {
-            return response()->json(['errors'=> 'Algo salio mal, no fue posible renovar la subscripcion', 'error' => $th], 500);
+            return response()->json(['errors'=> 'Algo salio mal, no fue posible renovar la suscripcion', 'error' => $th], 500);
+        }
+    }
+
+    public function unsubscribing(Request $request, int $subscriptionId)
+    {
+        // en el middleware "isNotMyPlanning" verificamos que la planificacion exista
+        try {
+            $user_id = $request->user()->id;
+
+            // Cancelamos la suscripcion
+            $subscription = Subscription::unsubscribing($user_id, $subscriptionId);
+    
+            return response()->json(['data'=> 'Suscripcion cancelada con exito'], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['errors'=> 'Algo salio mal, no fue posible cancelar la suscripcion', 'error' => $th], 500);
         }
     }
 }
