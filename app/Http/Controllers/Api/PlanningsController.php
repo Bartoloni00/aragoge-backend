@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 
 class PlanningsController extends Controller
 {
@@ -190,19 +191,24 @@ class PlanningsController extends Controller
     public function delete(int $id)
     {
         $planning = Planning::find($id);
-        //la validacion de esta planning se hizo en el middleware "ismyplanningmiddleware"
+        // La validación de esta planificación se hizo en el middleware "ismyplanningmiddleware"
+        try {
+            $planning->delete();
+            return response()->json(['message' => 'La planificación ha sido eliminada correctamente', 'status_code' => 204], 204);
 
-        $subscriptions = Subscription::getSubscriptionsByPlanningID($id);
-
-        if (is_array($subscriptions) && $subscriptions->count() > 0) {
+        } catch (QueryException $e) {
+            // Captura el error de integridad referencial (código 23000)
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'errors' => 'No se puede eliminar una planificación que posee suscripciones',
+                    'status' => 400
+                ], 400);
+            }
+    
             return response()->json([
-                'errors'=> 'No se puede eliminar una planificación con sus subscripciones',
-                'status' => 400
-            ],400);
+                'errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'status_code' => 500
+            ], 500);
         }
-
-        $planning->delete();
-
-        return response()->json(['message' => 'La planificación ha sido eliminada correctamente', 'status_code' => 204], 204);
     }
 }
