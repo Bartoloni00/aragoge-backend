@@ -66,7 +66,8 @@ Route::controller(PlanningsController::class)
     ->group(function(){
         Route::get('/', 'getPlannings');
         Route::get('/{id}', 'getPlanningByID')->whereNumber('id');
-        Route::get('/{id}/subscriptions', 'getSubscriptionsForThisPlanning')->whereNumber('id');
+        Route::get('/{Id}/subscriptions', 'getSubscriptionsForThisPlanning')->whereNumber('Id');
+        Route::get('/{id}/image', 'getImageForThisPlanning')->whereNumber('id');
 
         Route::post('/', 'create')
         ->middleware(['auth:sanctum', 'authorizeRole:professional']);

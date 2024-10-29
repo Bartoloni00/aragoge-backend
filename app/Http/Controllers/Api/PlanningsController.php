@@ -8,9 +8,11 @@ use App\Models\ProfessionalUser;
 use App\Models\Subscription;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+
 
 class PlanningsController extends Controller
 {
@@ -75,9 +77,9 @@ class PlanningsController extends Controller
         return response()->json($data,200);
     }
 
-    public function getSubscriptionsForThisPlanning(int $id)
+    public function getSubscriptionsForThisPlanning(int $Id)
     {
-        $subscriptions = Subscription::getSubscriptionsByPlanningID($id);
+        $subscriptions = Subscription::getSubscriptionsByPlanningID($Id);
         
         if (is_string($subscriptions) || $subscriptions->count() < 1) {
             return response()->json(['errors' => 'No se encontraron subscripciones para esta planificacion', 'status_code' => 404], 404);
@@ -89,6 +91,29 @@ class PlanningsController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function getImageForThisPlanning(int $id)
+    {
+        $planning = Planning::find($id);
+        $image = Image::find($planning->image_id);
+
+        if (!$image) {
+            return response()->json([
+                'errors' => 'No se encontró la imagen de la planificación',
+                'status_code' => 404
+            ], 404);
+        }
+
+        $path = storage_path('app/public/plannings/' . $image->name);
+        // Obtener el contenido de la imagen
+        $file = file_get_contents($path);
+
+        // Determinar el tipo MIME de la imagen
+        $type = mime_content_type($path);
+
+        // Retornar la imagen con el encabezado de tipo MIME
+        return response($file, 200)->header('Content-Type', $type);
     }
 
     public function create(Request $request)
@@ -116,7 +141,8 @@ class PlanningsController extends Controller
                 'synopsis',
                 'price',
                 'category_id',
-                'image_id',
+                'cover',
+                'cover_alt'
             ]);
 
             $dataPlanning['create_at'] = now();
@@ -125,6 +151,12 @@ class PlanningsController extends Controller
             $user = User::find($request->user()->id);
 
             $dataPlanning['professional_id'] = $user->professional_id;
+
+            if($request->hasFile('cover')){
+                $cover = $request->file('cover');
+                $image = Image::manipularImgPlanning($cover);
+                $dataPlanning['image_id'] = $image->id;
+            }
 
             $planning = Planning::create(attributes: $dataPlanning);
 
