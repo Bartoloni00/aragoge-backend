@@ -579,7 +579,11 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
   "status_code": 200
 }
 ```
+## Ver imagen de una planificacion
+`http://127.0.0.1:8000/api/plannings/{id}/image` 
+- **Method**: GET
 
+Esta ruta te devolvera la imagen de la planificacion en caso de que posea en caso contrario devolvera un error que indica que esa planificacion no posee una imagen asociada
 ## Crear una nueva planificacion
 `http://127.0.0.1:8000/api/plannings`: Esta ruta crea una nueva planificacion.
 - **Method**: POST
@@ -591,10 +595,11 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
 > Se requiere de un token de autenticacion para acceder a esta ruta.
 > el token debe pertenecear a un profesional registrado en el sistema.
 > enviar el header de accept: aplication/json
+> Los campos cover (la imagen) y cover_alt no son obligatorios
 
 ## editar una planificacion
 `http://127.0.0.1:8000/api/plannings/{id}`: Esta ruta crea una nueva planificacion.
-- **Method**: PATCH
+- **Method**: POST
 
 **Ejemplo**:
 <img style="margin: 10px" src="./docImages/EditPlanning.png" alt="Aragoge " style="margin:auto;" />
@@ -603,6 +608,7 @@ tienes que enviar el bearer token que te devuelve el login a la ruta de logout p
 > Se requiere de un token de autenticacion para acceder a esta ruta.
 > el token debe pertenecear a un profesional registrado en el sistema.
 > enviar el header de accept: aplication/json
+> Ningun dato es obligatorio.
 
 ## Eliminar una planificacion
 `http://127.0.0.1:8000/api/plannings/{id}`: Esta ruta crea una nueva planificacion.

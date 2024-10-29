@@ -154,7 +154,9 @@ class PlanningsController extends Controller
 
             if($request->hasFile('cover')){
                 $cover = $request->file('cover');
-                $image = Image::manipularImgPlanning($cover);
+                $dataPlanning['cover_alt'] = $dataPlanning['cover_alt'] ?? 'Imagen de portada';
+                
+                $image = Image::manipularImgPlanning($cover, $dataPlanning['cover_alt']);
                 $dataPlanning['image_id'] = $image->id;
             }
 
@@ -196,7 +198,8 @@ class PlanningsController extends Controller
             'synopsis',
             'price',
             'category_id',
-            'image_id',
+            'cover',
+            'cover_alt'
         ]);
 
         if($request->category_id && !Category::isValidCategoryId($request->category_id)) {
@@ -211,7 +214,15 @@ class PlanningsController extends Controller
         }
         
         $dataPlanning['updated_at'] = now();
-        
+        // Si la planificacion posee una images y el usuario esta enviandonos otra imagen para editar hacemos esto
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover');
+            $dataPlanning['cover_alt'] = $dataPlanning['cover_alt'] ?? 'Imagen de portada';
+                
+            $image = Image::manipularImgPlanning($cover, $dataPlanning['cover_alt'], $planning->image_id ?? null);
+            $dataPlanning['image_id'] = $image->id;
+        }
+
         $planning->update($dataPlanning);
         
         return response()->json(data: [

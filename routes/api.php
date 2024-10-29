@@ -72,7 +72,7 @@ Route::controller(PlanningsController::class)
         Route::post('/', 'create')
         ->middleware(['auth:sanctum', 'authorizeRole:professional']);
 
-        Route::patch('/{id}', 'update')
+        Route::post('/{id}', 'update')
             ->middleware(['auth:sanctum','authorizeRole:professional', 'isMyPlanning'])
             ->whereNumber('id');
 
