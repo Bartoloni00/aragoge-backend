@@ -18,22 +18,20 @@ class Image extends Model
         'updated_at'
     ];
 
-    public static function manipularImgPlanning($cover, null|string $image_alt = null, null|int $image_id = null)
+    public static function manipularImg(int $height, int $width,string $folder, $cover, null|string $image_alt = null, null|int $image_id = null)
     {
         $filename = time() . '.' . $cover->getClientOriginalExtension();
         $image = InterventionImage::read($cover);
         
         // Resize image
-        $image->resize(300, 300, function ($constraint) {
-            $constraint->upsize();
-        })->save(storage_path('app/public/plannings/' . $filename));
+        $image->cover($height, $width)->save(storage_path('app/public/'. trim($folder) .'/' . $filename));
     
         if (!empty($image_id)) {
             $existingImage = Image::find($image_id);
             
             if ($existingImage) {
                 // Elimina el archivo de imagen anterior físicamente si existe
-                Storage::delete('public/plannings/' . $existingImage->name);
+                Storage::delete('public/'. trim($folder) .'/' . $existingImage->name);
                 
                 // Actualiza el registro en la base de datos
                 $existingImage->update([

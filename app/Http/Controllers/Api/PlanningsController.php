@@ -156,7 +156,7 @@ class PlanningsController extends Controller
                 $cover = $request->file('cover');
                 $dataPlanning['cover_alt'] = $dataPlanning['cover_alt'] ?? 'Imagen de portada';
                 
-                $image = Image::manipularImgPlanning($cover, $dataPlanning['cover_alt']);
+                $image = Image::manipularImg(300, 300, 'plannings',$cover, $dataPlanning['cover_alt']);
                 $dataPlanning['image_id'] = $image->id;
             }
 
@@ -219,7 +219,7 @@ class PlanningsController extends Controller
             $cover = $request->file('cover');
             $dataPlanning['cover_alt'] = $dataPlanning['cover_alt'] ?? 'Imagen de portada';
                 
-            $image = Image::manipularImgPlanning($cover, $dataPlanning['cover_alt'], $planning->image_id ?? null);
+            $image = Image::manipularImg(300, 300, 'plannings', $cover, $dataPlanning['cover_alt'], $planning->image_id ?? null);
             $dataPlanning['image_id'] = $image->id;
         }
 

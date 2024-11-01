@@ -31,6 +31,7 @@ El desarrollo de Aragoge ha sido llevado a cabo por dos personas, quienes han as
 - Laravel 11: Framework utilizado para la construcción de la API.
 - Sanctum: Sistema de autenticación y generación de tokens para usuarios.
 - MySQL: Sistema de gestión de bases de datos relacional utilizado para almacenar y gestionar la información.
+- intervention/image-laravel: Manipulacion y manejo de imágenes.
 
 # Instalacion y configuracion
 
