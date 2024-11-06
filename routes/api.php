@@ -37,7 +37,7 @@ Route::controller(UsersController::class)
             ->whereNumber('id')
             ->middleware('role:professional,id');
 
-        Route::patch('/update', 'update')
+        Route::post('/update', 'update')
             ->middleware('auth:sanctum');
 
         Route::delete('/delete', 'delete')

@@ -33,6 +33,14 @@ class AuthController extends Controller
             $dataUser['create_at'] = now();
             $dataUser['updated_at'] = now();
 
+            if($request->hasFile('cover')){
+                $cover = $request->file('cover');
+                $dataUser['cover_alt'] = $dataUser['cover_alt'] ?? 'Imagen de perfil';
+                
+                $image = Image::manipularImg(250, 400, 'users',$cover, $dataUser['cover_alt']);
+                $dataUser['image_id'] = $image->id;
+            }
+
             User::create(attributes: $dataUser);
 
             DB::commit();

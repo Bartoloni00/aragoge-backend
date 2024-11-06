@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Planning;
 use App\Models\Subscription;
 use App\Models\Professional;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -86,15 +87,34 @@ class UsersController extends Controller
 
         $updateUserData['updated_at'] = now();
 
-        $user->update($updateUserData);
+        try {
+            DB::beginTransaction();
 
-        $data = [
-            'message' => 'Datos del usuario actualizados exitosamente',
-            'data' => $user,
-            'status_code' => 200
-        ];
+            if($request->hasFile('cover')){
+                $cover = $request->file('cover');
+                $updateUserData['cover_alt'] = $updateUserData['cover_alt'] ?? 'Imagen de perfil';
+                
+                $image = Image::manipularImg(250, 400, 'users',$cover, $updateUserData['cover_alt']);
+                $updateUserData['image_id'] = $image->id;
+            }
+            
+            $user->update($updateUserData);
 
-        return response()->json($data, 200);
+            $data = [
+                'message' => 'Datos del usuario actualizados exitosamente',
+                'data' => $user,
+                'status_code' => 200
+            ];
+
+            DB::commit();
+            return response()->json($data, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(data: [
+                'errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
+                'message' => $th->getMessage()
+            ], status: 500);
+        }
     }
 
     public function delete(Request $request)
@@ -109,6 +129,10 @@ class UsersController extends Controller
                 'data' => 'Usuario borrado exitosamente',
                 'status_code' => 200
             ];
+
+            if($user->image_id == null || $user->image_id == 0){
+                Image::deleteImage('users', $user->image_id);
+            }
 
             if ($user->rol->name == 'professional' && Professional::find($user->professional_id)) {
                 $professionalProfile = Professional::find($user->professional_id);

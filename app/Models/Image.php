@@ -51,4 +51,11 @@ class Image extends Model
             'created_at' => now()
         ]);
     }
+
+    public function deleteImage($folder, $image_id)
+    {
+        $image = Image::find($image_id);
+        $image->delete();
+        Storage::delete('public/'. trim($folder) .'/' . $image->name);
+    }
 }

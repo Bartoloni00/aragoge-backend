@@ -236,10 +236,19 @@ class PlanningsController extends Controller
         $planning = Planning::find($id);
         // La validación de esta planificación se hizo en el middleware "ismyplanningmiddleware"
         try {
+            DB::beginTransaction();
+            
+            if ($planning->image_id == null || $planning->image_id == 0) {
+                Image::deleteImage('plannings', $planning->image_id);
+            }
+
             $planning->delete();
+
+            DB::commit();
             return response()->json(['message' => 'La planificación ha sido eliminada correctamente', 'status_code' => 204], 204);
 
         } catch (QueryException $e) {
+            DB::rollBack();
             // Captura el error de integridad referencial (código 23000)
             if ($e->getCode() === '23000') {
                 return response()->json([
