@@ -134,6 +134,8 @@ class User extends Authenticatable
     {
         $user = User::find($id);
 
+        if(!$user) return null;
+
         if ($user->rol_name == 'professional') {
             $user->professional_data = ProfessionalUser::addProfessionalData($user);
         }

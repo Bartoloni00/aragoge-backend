@@ -19,9 +19,9 @@ return new class extends Migration
             $table->timestamp(column: 'email_verified_at')->nullable();
             $table->string(column: 'password');
             $table->rememberToken();
-            $table->foreignId(column: 'image_id')->nullable()->constrained(table: 'images');
+            $table->foreignId('image_id')->nullable()->constrained('images')->onDelete('cascade');
             $table->foreignId(column: 'rol_id')->constrained(table: 'roles');
-            $table->foreignId(column: 'professional_id')->nullable()->constrained(table: 'professionals');
+            $table->foreignId(column: 'professional_id')->nullable()->constrained(table: 'professionals')->onDelete('cascade');
             $table->timestamps();
         });
 

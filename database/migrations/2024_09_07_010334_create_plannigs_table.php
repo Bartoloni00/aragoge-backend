@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('synopsis');
             $table->unsignedInteger('price');
-            $table->foreignId('image_id')->nullable()->constrained('images');
+            $table->foreignId('image_id')->nullable()->constrained('images')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('professional_id')->constrained('professionals');
             $table->timestamps();

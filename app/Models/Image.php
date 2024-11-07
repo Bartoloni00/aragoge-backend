@@ -42,20 +42,20 @@ class Image extends Model
                 
                 return $existingImage;
             }
+        } else {
+            // Crea un nuevo registro si no se proporcionó $image_id o si no se encontró la imagen
+            return Image::create([
+                'name' => $filename,
+                'alt' => $image_alt ?? 'Imagen de portada',
+                'created_at' => now()
+            ]);
         }
-        
-        // Crea un nuevo registro si no se proporcionó $image_id o si no se encontró la imagen
-        return Image::create([
-            'name' => $filename,
-            'alt' => $image_alt ?? 'Imagen de portada',
-            'created_at' => now()
-        ]);
     }
 
-    public function deleteImage($folder, $image_id)
+    public static function deleteImage($folder, $image_id)
     {
         $image = Image::find($image_id);
-        $image->delete();
         Storage::delete('public/'. trim($folder) .'/' . $image->name);
+        $image->delete();
     }
 }

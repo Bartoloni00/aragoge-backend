@@ -96,6 +96,12 @@ class PlanningsController extends Controller
     public function getImageForThisPlanning(int $id)
     {
         $planning = Planning::find($id);
+        if (!$planning) {
+            return response()->json([
+                'errors' => 'La planificación no fue encontrada',
+                'status_code' => 404
+            ], 404);
+        }
         $image = Image::find($planning->image_id);
 
         if (!$image) {
@@ -238,9 +244,7 @@ class PlanningsController extends Controller
         try {
             DB::beginTransaction();
             
-            if ($planning->image_id == null || $planning->image_id == 0) {
-                Image::deleteImage('plannings', $planning->image_id);
-            }
+            if ($planning->image_id != null) { Image::deleteImage('plannings', $planning->image_id);}
 
             $planning->delete();
 

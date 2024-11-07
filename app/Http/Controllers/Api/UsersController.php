@@ -76,6 +76,35 @@ class UsersController extends Controller
         return response()->json($data, 200);
     }
 
+    public function getImageForThisUser(int $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'errors' => 'El usuario no fue encontrado',
+                'status_code' => 404
+            ], 404);
+        }
+        $image = Image::find($user->image_id);
+
+        if (!$image) {
+            return response()->json([
+                'errors' => 'No se encontró la imagen de la planificación',
+                'status_code' => 404
+            ], 404);
+        }
+        
+        $path = storage_path('app/public/users/' . $image->name);
+        // Obtener el contenido de la imagen
+        $file = file_get_contents($path);
+
+        // Determinar el tipo MIME de la imagen
+        $type = mime_content_type($path);
+
+        // Retornar la imagen con el encabezado de tipo MIME
+        return response($file, 200)->header('Content-Type', $type);
+    }
+
     public function update(Request $request)
     {
         $user = $request->user();
@@ -94,7 +123,7 @@ class UsersController extends Controller
                 $cover = $request->file('cover');
                 $updateUserData['cover_alt'] = $updateUserData['cover_alt'] ?? 'Imagen de perfil';
                 
-                $image = Image::manipularImg(250, 400, 'users',$cover, $updateUserData['cover_alt']);
+                $image = Image::manipularImg(250, 400, 'users',$cover, $updateUserData['cover_alt'], $user->image_id ?? null);
                 $updateUserData['image_id'] = $image->id;
             }
             
@@ -120,28 +149,24 @@ class UsersController extends Controller
     public function delete(Request $request)
     {
         $user = $request->user();
-
+        if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
         try {
             DB::beginTransaction();
-            if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
 
             $data = [
                 'data' => 'Usuario borrado exitosamente',
                 'status_code' => 200
             ];
 
-            if($user->image_id == null || $user->image_id == 0){
-                Image::deleteImage('users', $user->image_id);
-            }
+            if($user->image_id != null){ Image::deleteImage('users', $user->image_id);}
 
             if ($user->rol->name == 'professional' && Professional::find($user->professional_id)) {
                 $professionalProfile = Professional::find($user->professional_id);
 
-                $user->delete();
                 $professionalProfile->delete();
-            } else {
-                $user->delete();
             }
+
+            $user->delete();
 
 
             DB::commit();

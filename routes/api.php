@@ -37,6 +37,9 @@ Route::controller(UsersController::class)
             ->whereNumber('id')
             ->middleware('role:professional,id');
 
+        Route::get('/{id}/cover', 'getImageForThisUser')
+            ->whereNumber('id');
+
         Route::post('/update', 'update')
             ->middleware('auth:sanctum');
 

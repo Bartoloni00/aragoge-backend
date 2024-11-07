@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +46,7 @@ class AuthController extends Controller
 
             DB::commit();
 
-            return response()->json(data: ['message' => 'El usuario con el email: '. $dataUser['email'] . ' fue con exito' ], status: 201);
+            return response()->json(data: ['message' => 'El usuario con el email: '. $dataUser['email'] . 'se agrego con exito' ], status: 201);
             
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
