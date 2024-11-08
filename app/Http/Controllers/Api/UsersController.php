@@ -89,7 +89,7 @@ class UsersController extends Controller
 
         if (!$image) {
             return response()->json([
-                'errors' => 'No se encontró la imagen de la planificación',
+                'errors' => 'No se encontró la foto de perfil de este usuario',
                 'status_code' => 404
             ], 404);
         }
@@ -112,7 +112,7 @@ class UsersController extends Controller
         if(!$user) return response()->json(['errors' => 'Usuario no encontrado','status_code' => 404], 404);
 
         $request->validate(User::UPDATE_RULES, User::ERROR_MESSAGES);
-        $updateUserData = $request->only(['first_name', 'last_name', 'email', 'role_id']);
+        $updateUserData = $request->only(['first_name', 'last_name', 'email', 'rol_id']);
 
         $updateUserData['updated_at'] = now();
 

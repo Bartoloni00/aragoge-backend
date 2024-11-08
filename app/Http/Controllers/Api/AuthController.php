@@ -42,12 +42,11 @@ class AuthController extends Controller
                 $dataUser['image_id'] = $image->id;
             }
 
-            User::create(attributes: $dataUser);
+            $user = User::create(attributes: $dataUser);
 
             DB::commit();
 
-            return response()->json(data: ['message' => 'El usuario con el email: '. $dataUser['email'] . 'se agrego con exito' ], status: 201);
-            
+            return response()->json(data: ['message' => 'El usuario con el email: '. $dataUser['email'] . 'se agrego con exito con el id: '. $user->id], status: 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return response()->json(data: [
