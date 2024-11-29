@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Planning extends Model
 {
     use HasFactory;
-    protected $appends = ['professional_name', 'category_name'];
+    protected $appends = ['professional_name', 'category_name', 'user_id'];
 
     protected $hidden = ['professional', 'category'];
 
@@ -73,8 +73,16 @@ class Planning extends Model
 
     public function getProfessionalNameAttribute()
     {
-        $user = $this->professional->user->first();
+        $user = $this->professional->user;
         return $user ? $user->first_name . ' ' . $user->last_name : null;
+    }
+
+    public function getUserIdAttribute()
+    {
+        if ($this->professional && $this->professional->user) {
+            return $this->professional->user->id;
+        }
+        return null;
     }
 
     public function getCategoryNameAttribute()

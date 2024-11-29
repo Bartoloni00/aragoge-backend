@@ -1,15 +1,16 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Speciality;
 
 class Professional extends Model
 {
     use HasFactory;
 
-    protected $appends = ['specialty_name'];
+    protected $appends = ['specialty_name', 'user_id'];
 
     protected $fillable = [
         'description',
@@ -39,9 +40,9 @@ class Professional extends Model
         'specialty_id.in' => 'La especialidad tiene que ser un valor: 1, 2 o 3',
     ];
 
-    public function profession()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'professional_id');
+        return $this->hasOne(User::class, 'professional_id');
     }
 
     public function specialty()
@@ -49,13 +50,15 @@ class Professional extends Model
         return $this->belongsTo(Speciality::class, 'specialty_id');
     }
 
-    public function user()
-    {
-        return $this->hasMany(User::class, 'professional_id');
-    }
-
+    // Accesor para obtener el nombre de la especialidad
     public function getSpecialtyNameAttribute()
     {
         return $this->specialty ? $this->specialty->name : null;
+    }
+
+    // Accesor para obtener el ID del usuario
+    public function getUserIdAttribute()
+    {
+        return $this->user ? $this->user->id : null;
     }
 }
