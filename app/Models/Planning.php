@@ -66,9 +66,16 @@ class Planning extends Model
     {
         return $this->belongsTo(Planning::class, 'image_id');
     }
+    
     public function professional()
     {
         return $this->belongsTo(Professional::class, 'professional_id');
+    }
+
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     public function getProfessionalNameAttribute()

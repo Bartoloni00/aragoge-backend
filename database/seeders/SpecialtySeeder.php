@@ -15,15 +15,19 @@ class SpecialtySeeder extends Seeder
     {
         DB::table('specialties')->insert([
             [
-                'name' => 'trainer',
+                'name' => 'Entrenador',
                 'created_at' => now()
             ],
             [
-                'name' => 'nutritionist',
+                'name' => 'Nutricionista',
                 'created_at' => now()
             ],
             [
-                'name' => 'therapist',
+                'name' => 'Terapeuta',
+                'created_at' => now()
+            ],
+            [
+                'name' => 'Sin definir',
                 'created_at' => now()
             ],
         ]);

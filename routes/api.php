@@ -37,6 +37,8 @@ Route::controller(UsersController::class)
             ->whereNumber('id')
             ->middleware('role:professional,id');
 
+        Route::get('/professionals/top-subscribed', 'getTopSubscribedProfessionals');
+
         Route::get('/{id}/cover', 'getImageForThisUser')
             ->whereNumber('id');
 

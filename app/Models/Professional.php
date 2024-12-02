@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Speciality;
+use App\Models\Planning;
 
 class Professional extends Model
 {
@@ -48,6 +49,11 @@ class Professional extends Model
     public function specialty()
     {
         return $this->belongsTo(Speciality::class, 'specialty_id');
+    }
+
+    public function plannings()
+    {
+        return $this->hasMany(Planning::class);
     }
 
     // Accesor para obtener el nombre de la especialidad

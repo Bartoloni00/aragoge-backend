@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use App\Models\Professional;
 use App\Models\Image;
 use App\Models\User;
+use App\Models\ProfessionalUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -188,5 +189,22 @@ class UsersController extends Controller
                 'message' => $th->getMessage()
             ], status: 500);
         }
+    }
+
+    public function getTopSubscribedProfessionals(Request $request)
+    {
+        $limit = $request->query('limit');
+        
+        $users = ProfessionalUser::getTopSubscribedProfessionals($limit ?? 5);
+        
+
+        if($users->count() < 1) return response()->json(['errors' => 'Usuarios no encontrados','status_code' => 404], 404);
+
+        $data = [
+            'data' => $users,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
     }
 }
