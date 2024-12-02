@@ -21,12 +21,6 @@ class Professional extends Model
         'updated_at'
     ];
 
-    public const CREATE_RULES = [
-        'description' => ['required'],
-        'synopsis' => ['required'],
-        'specialty_id' => ['required', 'integer', 'in:1,2,3'],
-    ];
-
     public const UPDATE_RULES = [
         'description' => ['string'],
         'synopsis' => ['string'],
@@ -66,5 +60,16 @@ class Professional extends Model
     public function getUserIdAttribute()
     {
         return $this->user ? $this->user->id : null;
+    }
+
+    public static function createDefaultProfessionalProfile()
+    {
+        return Professional::create([
+            'description' => 'Este perfil profesional todavia no posee una descripcion',
+            'synopsis' => 'Perfil profesional sin descripcion',
+            'specialty_id' => 4,
+            'created_at' => now(),
+            'updated_at' => now(), 
+        ]);
     }
 }

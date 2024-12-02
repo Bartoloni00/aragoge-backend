@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Professional;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,6 @@ class AuthController extends Controller
                 'password',
                 'rol_id',
                 'image_id',
-                'professional_id',
                 'created_at',
                 'updated_at',
             ]);
@@ -40,6 +40,11 @@ class AuthController extends Controller
                 
                 $image = Image::manipularImg(250, 400, 'users',$cover, $dataUser['cover_alt']);
                 $dataUser['image_id'] = $image->id;
+            }
+
+            if ($dataUser['rol_id'] == 3) {
+                $professionalProfile = Professional::createDefaultProfessionalProfile();
+                $dataUser['professional_id'] = $professionalProfile->id;
             }
 
             $user = User::create(attributes: $dataUser);

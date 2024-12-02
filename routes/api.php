@@ -52,9 +52,6 @@ Route::controller(UsersController::class)
 Route::controller(ProfessionalController::class)
     ->prefix('professionals')
     ->group(function(){
-        Route::post('/profile', 'createProfessionalProfile')
-            ->middleware(['auth:sanctum', 'authorizeRole:professional']);
-
         Route::patch('/profile', 'updateProfessionalProfile')
             ->middleware(['auth:sanctum', 'authorizeRole:professional']);
     });

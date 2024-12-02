@@ -8,36 +8,6 @@ use App\Models\Professional;
 
 class ProfessionalController extends Controller
 {
-    public function createProfessionalProfile(Request $request)
-    {
-        try {
-            $user = $request->user();
-            $professionalProfileData = $request->only(['description', 'synopsis', 'specialty_id']);
-
-            $request->validate(Professional::CREATE_RULES, Professional::ERROR_MESSAGES);
-
-            $professionalProfileData['created_at'] = now();
-            $professionalProfileData['updated_at'] = now(); 
-
-            $professional = Professional::create($professionalProfileData);
-
-            $user->update(['professional_id' => $professional->id]);
-
-            $data = [
-                'message' => 'Perfil profesional creado exitosamente',
-                'data' => $professional,
-                'status_code' => 201
-            ];
-
-            return response()->json($data, 201);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'errors' => 'Ocurrio un error inesperado. Por favor, inténtelo de nuevo.',
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
     public function updateProfessionalProfile(Request $request)
     {
         $user = $request->user();

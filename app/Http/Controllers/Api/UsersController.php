@@ -127,6 +127,12 @@ class UsersController extends Controller
                 $image = Image::manipularImg(250, 400, 'users',$cover, $updateUserData['cover_alt'], $user->image_id ?? null);
                 $updateUserData['image_id'] = $image->id;
             }
+
+            if ($updateUserData['rol_id'] == 3 && $user->professional_id == null) {
+                // Si el usuario es profesional y no tiene un perfil profesional, crea uno
+                $professionalProfile = Professional::createDefaultProfessionalProfile();
+                $updateUserData['professional_id'] = $professionalProfile->id;
+            }
             
             $user->update($updateUserData);
 
