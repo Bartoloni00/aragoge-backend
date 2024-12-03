@@ -282,6 +282,10 @@ Las categorias se pueden obtener desde dos rutas:
     }
     ```
 
+- `http://127.0.0.1:8000/api/professionals/top-subscribed`: Trae los profesionales que tienen mas suscripciones.
+    `http://127.0.0.1:8000/api/professionals/top-subscribed?limit=10`: podes decir cuantos profesionales quieres que se muestren en la respuesta.
+    - **Method**: GET
+
 2. `http://127.0.0.1:8000/api/users/<id-usuario>`: Desde este endpoint podras traer al usuario dependiendo de su id, en caso de no existir un usuario con ese id se devuelve un error 404.
     - **Method**: GET
     > [!INFO]
@@ -328,6 +332,10 @@ Las categorias se pueden obtener desde dos rutas:
     "status_code": 200
     }
     ```
+
+## Ver imagen de un usuario
+`http://127.0.0.1:8000/api/users/{id}/cover` 
+- **Method**: GET
 
     3. Ejemplo 3: el usuario es un profesional la respuesta contiene informacion adicional coomo la descripcion del perfil profesional, una synopsis de esta y la especialidad que este profesional tiene.
     `http://127.0.0.1:8000/api/users/3`
@@ -752,14 +760,12 @@ Esta ruta te devolvera la imagen de la planificacion en caso de que posea en cas
 
 
 ## Perfiles de profesionales
-Una vez que registras a tu usuario como un profesional podras crear tu perfil de profesional, para ello deberas hacer un POST a la siguiente ruta: `http://127.0.0.1:8000/api/professionals/profile` y enviar los siguientes parametros:
+Una vez que registras a tu usuario como un profesional se generara un perfil de profesional con datos genericos el cual luego deberas personalizar para que se adapte a tu perfil profesional.
+Otro caso en el cual se creara automaticamente el perfil profesional es cunado un usuario atleta decide cambiarse el rol a profesional. si ese usuario ya tenia previamente un perfil profesional (antes era profesional y se habia cambiado a atleta) se reutilizara el mismo perfil que tenia creado previamente.
 
 - **description**: Una descripcion del perfil profesional.
 - **synopsis**: Una descripcion resumida del perfil profesional.
 - **specialty_id**: El id del specialty que pertenece a tu profesional (1, 2 o 3).
-
-**Ejemplo**:
-`http://127.0.0.1:8000/api/professionals/profile`
 
 ```JSON
 {
@@ -768,26 +774,6 @@ Una vez que registras a tu usuario como un profesional podras crear tu perfil de
   "specialty_id": 1
 }
 ```
-
-Una vez que hayas enviado los datos correctamente, deberias obtener un 200 OK y un json con el siguiente formato:
-
-```JSON
-{
-  "data": {
-    "id": 1,
-    "description": "Entrenador personal especializado en fuerza y acondicionamiento físico. Con amplia experiencia en diseño de programas de entrenamiento personalizados.",    
-    "synopsis": "Ayuda a mis clientes a alcanzar sus objetivos de fitness de manera segura y efectiva. Mi enfoque se basa en la motivación y el seguimiento personalizado.",
-    "specialty_id": 1,
-    "specialty_name": "trainer",
-    "created_at": "2024-09-16T22:27:26.000000Z",
-    "updated_at": null
-  },
-  "status_code": 200
-}
-```
-
-Si el registro de tu perfil de profesional falla, deberias obtener un 422 Unprocessable Entity y un json con el siguiente formato o un 404 Not found ya que no se encontro al usuario que se le asignara ese perfil de profesional.
-
 
 **¿Como indicar cual es el usuario al que se le asignara el perfil de profesional?**
 Esto lo sabemos gracias al bearer token con ese token identificamos al usuario verificamos que sea un profesional y asignamos el perfil de profesional a ese usuario.

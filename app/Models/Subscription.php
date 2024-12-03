@@ -69,6 +69,7 @@ class Subscription extends Model
     
         $subscription->update([
             'expiration_date' => Carbon::parse($subscription->expiration_date)->addMonth(),
+            'is_active' => 1,
             'updated_at' => now()
         ]);
     

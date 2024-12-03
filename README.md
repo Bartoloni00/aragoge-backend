@@ -52,12 +52,18 @@ git clone https://github.com/Bartoloni00/aragoge-backend.git
 cd aragoge-backend
 ``` 
 
-3. Instala todas las dependencias del proyecto
+3. En caso de que no tengas las carpetas "storage/app/public/planning" y "storage/app/public/users", crealas
+``` Bash
+mkdir storage/app/public/planning
+mkdir storage/app/public/users
+```
+
+4. Instala todas las dependencias del proyecto
 ``` Bash
 composer install
 ``` 
 
-4. Corre las migraciones y los seeders, generando la base de datos y cargando algunos datos
+5. Corre las migraciones y los seeders, generando la base de datos y cargando algunos datos
 ``` Bash
 php artisan migrate
 ``` 
@@ -65,17 +71,17 @@ php artisan migrate
 php artisan db:seed
 ``` 
 
-5. En caso de que no se haya generado la APP_KEY en el archivo ".env" lanza el siguiente comando
+6. En caso de que no se haya generado la APP_KEY en el archivo ".env" lanza el siguiente comando
 ``` Bash
 php artisan key:generate
 ``` 
 
-6. Despliega la API
+7. Despliega la API
 ``` Bash
 php artisan serve
 ``` 
 
-7. En caso de que ya tengas creada la base de datos y quiera restaurarla, ejecuta el siguiente comando:
+8. En caso de que ya tengas creada la base de datos y quiera restaurarla, ejecuta el siguiente comando:
 ``` Bash
 php artisan migrate:fresh --seed
 ```
