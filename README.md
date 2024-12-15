@@ -54,7 +54,7 @@ cd aragoge-backend
 
 3. En caso de que no tengas las carpetas "storage/app/public/planning" y "storage/app/public/users", crealas
 ``` Bash
-mkdir storage/app/public/planning
+mkdir storage/app/public/plannings
 mkdir storage/app/public/users
 ```
 

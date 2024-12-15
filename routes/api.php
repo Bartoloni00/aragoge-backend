@@ -126,4 +126,8 @@ Route::controller(PaymentsController::class)
     ->group(function(){
         Route::get('/', 'getPayments');
         Route::get('/{id}', 'getPaymentByID')->whereNumber('id');
+
+        Route::post('/register/{payment_id}', 'register')
+            ->whereNumber('payment_id')
+            ->middleware(['auth:sanctum', 'validatePayment']);
     });

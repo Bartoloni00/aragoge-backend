@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\PendingPaymentException;
 use Carbon\Carbon;
 
 class Subscription extends Model
@@ -66,7 +67,13 @@ class Subscription extends Model
         $subscription = Subscription::where('user_id', $userId)
             ->where('planning_id', $planning_id)
             ->firstOrFail();
-    
+
+        $lastPayment = $subscription->payments()->latest()->first();
+         // Verificar si el estado del último pago no es "success"
+        if ($lastPayment && $lastPayment->payment_status !== 'success') {
+            throw new PendingPaymentException();
+        }
+
         $subscription->update([
             'expiration_date' => Carbon::parse($subscription->expiration_date)->addMonth(),
             'is_active' => 1,

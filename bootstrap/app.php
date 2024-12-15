@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'isMyPlanning' => \App\Http\Middleware\IsMyPlanningMiddleware::class,
             'isNotMyPlanning' => \App\Http\Middleware\isNotMyPlanningMiddleware::class,
             'isSubscrited' => \App\Http\Middleware\IsSubscritedMiddleware::class,
+            'validatePayment' => \App\Http\Middleware\ValidatePayment::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

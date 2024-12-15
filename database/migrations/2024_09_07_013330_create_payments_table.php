@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('amount');
-            $table->date('payment_date');
-            $table->string('playment_method',60);
-            $table->string('playment_status',60);
+            $table->unsignedInteger('total_price');
+            $table->string('preference_id')->nullable();
+            $table->string('payment_id')->nullable();
+            $table->string('payment_status',60);
             $table->foreignId('subscription_id')->constrained('subscriptions');
             $table->timestamps();
         });

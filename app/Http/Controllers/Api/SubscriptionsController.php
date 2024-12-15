@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\Planning;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Exceptions\PendingPaymentException;
 
 class SubscriptionsController extends Controller
 {
@@ -44,6 +47,7 @@ class SubscriptionsController extends Controller
     {
         // en el middleware "isNotMyPlanning" verificamos que la planificacion exista
         try {
+            DB::beginTransaction();
             $subscription = Subscription::create([
                 'user_id' => $request->user()->id,
                 'planning_id' => $planningId,
@@ -53,8 +57,20 @@ class SubscriptionsController extends Controller
                 'created_at' => now(),
             ]);
     
+
+            $payment = Payment::create([
+                'total_price' => Planning::find($planningId)->price,
+                'preference_id' => null,
+                'payment_id' => null,
+                'payment_status' => 'pendiente',
+                'subscription_id' => $subscription->id,
+            ]);
+
+            DB::commit();
             return response()->json(['data'=> $subscription], 201);
         } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
             return response()->json(['errors'=> 'Algo salio mal, no fue posible crear la subscripcion', 'error' => $th], 500);
 
         }
@@ -68,8 +84,18 @@ class SubscriptionsController extends Controller
 
             // Renovamos la suscripcion por 30 dias mas
             $subscription = Subscription::renew($user_id, $planningId);
+
+            $payment = Payment::create([
+                'total_price' => Planning::find($planningId)->price,
+                'preference_id' => null,
+                'payment_id' => null,
+                'payment_status' => 'pendiente',
+                'subscription_id' => $subscription->id,
+            ]);
     
             return response()->json(['data'=> $subscription], 201);
+        } catch (PendingPaymentException $e) {
+            return response()->json(['error' => $e->getMessage(), 'code' => $e->getCode()], 400);
         } catch (\Throwable $th) {
             return response()->json(['errors'=> 'Algo salio mal, no fue posible renovar la suscripcion', 'error' => $th], 500);
         }
