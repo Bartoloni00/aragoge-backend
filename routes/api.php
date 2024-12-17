@@ -130,4 +130,7 @@ Route::controller(PaymentsController::class)
         Route::post('/register/{payment_id}', 'register')
             ->whereNumber('payment_id')
             ->middleware(['auth:sanctum', 'validatePayment']);
+
+        Route::post('create_preference', 'createPreference')
+            ->middleware(['auth:sanctum']);
     });

@@ -6,16 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Exception;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\Exceptions\MPApiException;
 
 class Payment extends Model
 {
     use HasFactory;
-
-    protected $hidden = [
-        "created_at",
-        "updated_at",
-    ];
 
     protected $fillable = [
         'total_price',
@@ -61,5 +58,29 @@ class Payment extends Model
         } catch (\Exception $e) {
             throw new Exception("Error inesperado al validar el pago: {$e->getMessage()}", 4);
         }
+    }
+
+    public static function createPreference($planningId,$paymentId)
+    {
+        $planning = Planning::find($planningId);
+        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+        $client = new PreferenceClient();
+
+        $preference = $client->create([
+            "items"=>[
+                [
+                    "id"=> "1",
+                    "title"=> "Producto 1",
+                    "quantity"=> 1,
+                    "currency_id"=> "ARS",
+                    "unit_price"=> 10.00
+                ]
+                ],
+            "statement_descriptor"=> "Aragoge",
+            "external_reference"=> "paymentid"
+            ]
+        );
+
+        return $preference->id;
     }
 }

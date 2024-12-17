@@ -38,4 +38,20 @@ class PaymentsController extends Controller
 
         return response()->json($data,200);
     }
+
+    public function createPreference(Request $request)
+    {
+        try {
+            $preferenceId = Payment::createPreference($request->planning,$request->payment_id);
+            return response()->json([
+                'data' => $preferenceId,
+                'status' => 200
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors'=> $th->getMessage(),
+                'status' => 500
+            ],500);
+        }
+    }
 }

@@ -282,8 +282,8 @@ Las categorias se pueden obtener desde dos rutas:
     }
     ```
 
-- `http://127.0.0.1:8000/api/professionals/top-subscribed`: Trae los profesionales que tienen mas suscripciones.
-    `http://127.0.0.1:8000/api/professionals/top-subscribed?limit=10`: podes decir cuantos profesionales quieres que se muestren en la respuesta.
+- `http://127.0.0.1:8000/api/users/professionals/top-subscribed`: Trae los profesionales que tienen mas suscripciones.
+    `http://127.0.0.1:8000/api/users/professionals/top-subscribed?limit=10`: podes decir cuantos profesionales quieres que se muestren en la respuesta.
     - **Method**: GET
 
 2. `http://127.0.0.1:8000/api/users/<id-usuario>`: Desde este endpoint podras traer al usuario dependiendo de su id, en caso de no existir un usuario con ese id se devuelve un error 404.
