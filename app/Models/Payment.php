@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Planning;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\MercadoPagoConfig;
@@ -62,25 +65,75 @@ class Payment extends Model
 
     public static function createPreference($planningId,$paymentId)
     {
-        $planning = Planning::find($planningId);
         MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+
+        $items = self::createPaymentItemsPreference($planningId);
+        $payer = self::createPayer($paymentId);
+        $request = self::createPreferenceRequest($items, $payer, $paymentId);
+
         $client = new PreferenceClient();
 
-        $preference = $client->create([
-            "items"=>[
-                [
-                    "id"=> "1",
-                    "title"=> "Producto 1",
-                    "quantity"=> 1,
-                    "currency_id"=> "ARS",
-                    "unit_price"=> 10.00
-                ]
-                ],
+        try {
+            $preference = $client->create($request);
+            return $preference;
+        } catch (MPApiException $error) {
+            return null;
+        }
+
+    }
+
+    private static function createPayer($paymentId): array
+    {
+        $payment = Payment::find($paymentId);
+        $suscription = Subscription::find($payment->subscription_id);
+        $user = User::find($suscription->user_id);
+        $payer = array(
+            "name"=> $user->first_name,
+            "surname"=> $user->last_name,
+            "email"=> $user->email,
+        );
+        return $payer;
+    }
+
+    private static function createPreferenceRequest($items, $payer, $paymentId): array
+    {
+        $paymentMethods = [
+            "excluded_payment_methods" => [],
+            "installments" => 12,
+            "default_installments" => 1
+        ];
+    
+        $backUrls = array(
+            'success' => "https://ezequiel-arevalo.github.io/aragoge/",
+            'failure' => "https://ezequiel-arevalo.github.io/aragoge/"
+        );
+    
+        $request = [
+            "items" => $items,
+            "payer" => $payer,
+            "payment_methods" => $paymentMethods,
+            "back_urls" => $backUrls,
             "statement_descriptor"=> "Aragoge",
-            "external_reference"=> "paymentid"
-            ]
+            "external_reference"=> $paymentId,
+            "expires"=> false,
+            "auto_return" => 'approved',
+        ];
+        return $request;
+    }
+
+    private static function createPaymentItemsPreference($planningId)
+    {
+        $planning = Planning::find($planningId);
+
+        $item = array(
+            "id" => $planning->id,
+            "title" => $planning->title,
+            "description" => $planning->description,
+            "currency_id" => "ARS",
+            "quantity" => 1,
+            "unit_price" => $planning->price,
         );
 
-        return $preference->id;
+        return $items = array($item);
     }
 }

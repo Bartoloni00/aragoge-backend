@@ -30,8 +30,7 @@ Route::controller(UsersController::class)
         Route::get('/{id}','getByID')->whereNumber('id');
 
         Route::get('/{id}/subscriptions', 'getSubscriptions')
-            ->whereNumber('id')
-            ->middleware('role:atlete,id');
+            ->whereNumber('id');
 
         Route::get('/{id}/plannings', 'getPlannings')
             ->whereNumber('id')
